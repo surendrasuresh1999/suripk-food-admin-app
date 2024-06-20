@@ -111,7 +111,7 @@ const OrdersPage = () => {
                         </span>
                       </TableCell>
                       <TableCell align="left">
-                        <span className="flex items-center gap-1 text-14size">
+                        <span className="flex items-center justify-center gap-1 text-14size">
                           {row.ratingArr[0]?.value || 0}
                           <StarIcon className="h-5 w-5 text-yellow-400" />
                         </span>
@@ -122,8 +122,10 @@ const OrdersPage = () => {
                           {row.totalAmount}
                         </span>
                       </TableCell>
-                      <TableCell align="left">
-                        <span className="flex items-center justify-center gap-1 font-semibold">
+                      <TableCell align="center">
+                        <span
+                          className={`inline-block ${row.status === "Preparing" ? "text-gray-600" : row.status === "Delivered" ? "text-green-500" : "text-orange-500"} font-semibold`}
+                        >
                           {row.status}
                         </span>
                       </TableCell>
