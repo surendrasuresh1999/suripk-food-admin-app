@@ -21,6 +21,12 @@ import ConnectionLost from "../Common/ConnectionLost";
 import { IndianRupeeIcon } from "lucide-react";
 import Avatar from "@mui/material/Avatar";
 import AvatarGroup from "@mui/material/AvatarGroup";
+import {
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+  Transition,
+} from "@headlessui/react";
 
 const tableHeadCells = [
   "Images",
@@ -29,6 +35,13 @@ const tableHeadCells = [
   "Amount",
   "Status",
   "Action",
+];
+
+const orderStatus = [
+  "Processing",
+  "Confirmed",
+  "Out for Delivery",
+  "Delivered",
 ];
 
 const OrdersPage = () => {
@@ -62,8 +75,40 @@ const OrdersPage = () => {
     rowsPerPage -
     Math.min(rowsPerPage, data?.orders?.length - page * rowsPerPage);
 
-  const handleCreateFood = (foddData) => {
-    console.log(foddData);
+  const renderStatusUpdateMenu = () => {
+    return (
+      <div className="flex gap-8">
+        <Popover __demoMode>
+          <PopoverButton className="text-sm/6 font-semibold text-red-400 outline-none">
+            Solutions
+          </PopoverButton>
+          <Transition
+            enter="transition ease-out duration-200"
+            enterFrom="opacity-0 translate-y-1"
+            enterTo="opacity-100 translate-y-0"
+            leave="transition ease-in duration-150"
+            leaveFrom="opacity-100 translate-y-0"
+            leaveTo="opacity-0 translate-y-1"
+          >
+            <PopoverPanel
+              anchor="bottom"
+              className="popover-shadow divide-y divide-white/5 rounded-md bg-white text-sm/6 [--anchor-gap:var(--spacing-5)]"
+            >
+              <div className="flex flex-col justify-start gap-2 py-2">
+                {orderStatus.map((button, i) => (
+                  <button
+                    key={i}
+                    className="px-6 py-1 text-start text-14size tracking-wide text-slate-600 hover:bg-gray-200"
+                  >
+                    {button}
+                  </button>
+                ))}
+              </div>
+            </PopoverPanel>
+          </Transition>
+        </Popover>
+      </div>
+    );
   };
   return (
     <div className="space-y-6">
@@ -130,11 +175,7 @@ const OrdersPage = () => {
                         </span>
                       </TableCell>
                       <TableCell align="center">
-                        <div className="flex items-center justify-center gap-2">
-                          <button>
-                            <PencilSquareIcon className="h-5 w-5 text-green-500" />
-                          </button>
-                        </div>
+                        {renderStatusUpdateMenu()}
                       </TableCell>
                     </TableRow>
                   ))}
