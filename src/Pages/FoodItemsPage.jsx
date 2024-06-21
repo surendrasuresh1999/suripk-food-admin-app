@@ -96,7 +96,7 @@ const FoodItemsPage = () => {
           })
           .then((res) => {
             if (res.data.status) {
-              swal("Poof! Your product has been deleted!", {
+              swal("Poof! Your food item has been deleted successfully!", {
                 icon: "success",
               });
               queryClient.invalidateQueries("foodItemsData");

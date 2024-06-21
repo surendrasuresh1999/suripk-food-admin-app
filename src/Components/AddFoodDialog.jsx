@@ -17,7 +17,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 const AddFoodDialog = ({ openDialog, setterFun, handler }) => {
   const [showLoader, setShowLoader] = useState(false);
-  const [foodImageurl, setFoodImageurl] = useState("https://media.istockphoto.com/id/651110156/photo/egg-biryani-served-with-yogurt-dip-on-a-clay-pot-selective-focus.jpg?s=1024x1024&w=is&k=20&c=aqQlNwElz058WE6BsRkIhYSmc2U1_3BDof3Ej0IQH2A=");
+  const [foodImageurl, setFoodImageurl] = useState("");
 
   const foodObject = {
     title: "",
@@ -135,12 +135,21 @@ const AddFoodDialog = ({ openDialog, setterFun, handler }) => {
               ))}
               {foodImageurl !== "" && (
                 <div className="flex items-start gap-2">
-                <img
-                  src={foodImageurl}
-                  alt="food-img"
-                  className="h-24 w-24 rounded-md"
-                />
-                <button className="px-2 py-1 bg-indigo-50 text-indigo-500 rounded-md">Change image</button>
+                  <img
+                    src={foodImageurl}
+                    alt="food-img"
+                    className="h-24 w-24 rounded-md"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFoodImageurl("");
+                      handleUploadImage();
+                    }}
+                    className="rounded-md bg-indigo-50 px-2 py-1 text-indigo-500"
+                  >
+                    Change image
+                  </button>
                 </div>
               )}
               <button
