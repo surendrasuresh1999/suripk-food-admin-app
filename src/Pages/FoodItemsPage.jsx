@@ -11,10 +11,13 @@ import Paper from "@mui/material/Paper";
 import { TableHead } from "@mui/material";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/16/solid";
 import { Baseurl } from "../BaseUrl";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Loader from "../Common/Loader";
 import ConnectionLost from "../Common/ConnectionLost";
 import { IndianRupeeIcon } from "lucide-react";
+import swal from "sweetalert";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const tableHeadCells = ["Image", "Title", "Description", "Price", "Action"];
 
@@ -22,6 +25,7 @@ const FoodItemsPage = () => {
   const [openAddFoodDialog, setOpenAddFoodDialog] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const queryClient = useQueryClient();
 
   const fetchFoodItems = async () => {
     return await fetch(`${Baseurl.baseurl}/api/food`, {
@@ -46,11 +50,77 @@ const FoodItemsPage = () => {
   };
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, data?.foodItems?.length - page * rowsPerPage);
+    rowsPerPage -
+    Math.min(rowsPerPage, data?.foodItems?.length - page * rowsPerPage);
 
-  const handleCreateFood = (foddData) => {
-    console.log(foddData);
+  const handleCreateFood = (foddData, actions) => {
+    axios
+      .post(
+        `${Baseurl.baseurl}/api/food`,
+        { foddData },
+        {
+          headers: {
+            Authorization: `Bearer ${Baseurl.token}`,
+          },
+        },
+      )
+      .then((res) => {
+        if (res.data.status) {
+          toast.success(res.data.message);
+          queryClient.invalidateQueries("foodItemsData");
+          setOpenAddFoodDialog(false);
+          actions.resetForm();
+        } else {
+          toast.error(res.data.message);
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
   };
+
+  const handleDeleteFood = (foodId) => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this product!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        axios
+          .delete(`${Baseurl.baseurl}/api/food/${foodId}`, {
+            headers: {
+              Authorization: `Bearer ${Baseurl.token}`,
+            },
+          })
+          .then((res) => {
+            if (res.data.status) {
+              swal("Poof! Your product has been deleted!", {
+                icon: "success",
+              });
+              queryClient.invalidateQueries("foodItemsData");
+            } else {
+              swal("Oops! Something went wrong while deleting.", {
+                icon: "error",
+              });
+            }
+          })
+          .catch((error) => {
+            swal("Oops! Something went wrong while deleting.", {
+              icon: "error",
+            });
+            console.error("Error:", error);
+          });
+      } else {
+        swal({
+          text: "Your food item is Safe!",
+          icon: "info",
+        });
+      }
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
@@ -90,8 +160,8 @@ const FoodItemsPage = () => {
               <TableBody>
                 {data.foodItems
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
-                    <TableRow key={row.id}>
+                  .map((row, i) => (
+                    <TableRow key={i}>
                       <TableCell component="th" scope="row">
                         <img
                           src={row.imageUrl}
@@ -100,18 +170,17 @@ const FoodItemsPage = () => {
                         />
                       </TableCell>
                       <TableCell align="left">
-                        <span className="block truncate">
-                          {row.title}
-                        </span>
+                        <span className="block truncate">{row.title}</span>
                       </TableCell>
                       <TableCell align="left">
-                        <span className="block max-w-20 break words sm:max-w-60">
+                        <span className="break words block max-w-20 sm:max-w-60">
                           {row.discription}
                         </span>
                       </TableCell>
                       <TableCell align="left">
                         <span className="flex items-center gap-1 font-semibold">
-                        <IndianRupeeIcon size={15}/>{row.price}
+                          <IndianRupeeIcon size={15} />
+                          {row.price}
                         </span>
                       </TableCell>
                       <TableCell align="center">
@@ -119,7 +188,7 @@ const FoodItemsPage = () => {
                           <button>
                             <PencilSquareIcon className="h-5 w-5 text-green-500" />
                           </button>
-                          <button>
+                          <button onClick={() => handleDeleteFood(row._id)}>
                             <TrashIcon className="h-5 w-5 text-gray-500" />
                           </button>
                         </div>
@@ -127,7 +196,7 @@ const FoodItemsPage = () => {
                     </TableRow>
                   ))}
                 {emptyRows > 0 && (
-                  <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableRow style={{ height: 50 * emptyRows }}>
                     <TableCell colSpan={5} />
                   </TableRow>
                 )}
