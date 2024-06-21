@@ -1,4 +1,3 @@
-import { PlusCircleIcon } from "@heroicons/react/20/solid";
 import React, { useState } from "react";
 import AddFoodDialog from "../Components/AddFoodDialog";
 import Table from "@mui/material/Table";
@@ -9,13 +8,9 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { TableHead } from "@mui/material";
-import {
-  PencilSquareIcon,
-  StarIcon,
-  TrashIcon,
-} from "@heroicons/react/16/solid";
+import { StarIcon } from "@heroicons/react/16/solid";
 import { Baseurl } from "../BaseUrl";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Loader from "../Common/Loader";
 import ConnectionLost from "../Common/ConnectionLost";
 import { IndianRupeeIcon } from "lucide-react";
@@ -27,6 +22,8 @@ import {
   PopoverPanel,
   Transition,
 } from "@headlessui/react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const tableHeadCells = [
   "Images",
@@ -38,8 +35,8 @@ const tableHeadCells = [
 ];
 
 const orderStatus = [
-  "Processing",
   "Confirmed",
+  "Processing",
   "Out for Delivery",
   "Delivered",
 ];
@@ -48,6 +45,7 @@ const OrdersPage = () => {
   const [openAddFoodDialog, setOpenAddFoodDialog] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const queryClient = useQueryClient();
 
   const fetchAllOrders = async () => {
     return await fetch(`${Baseurl.baseurl}/api/orders`, {
@@ -75,10 +73,34 @@ const OrdersPage = () => {
     rowsPerPage -
     Math.min(rowsPerPage, data?.orders?.length - page * rowsPerPage);
 
-  const renderStatusUpdateMenu = () => {
+  const handleChangeOrderStatus = (statusText, orderId) => {
+    axios
+      .put(
+        `${Baseurl.baseurl}/api/orders/${orderId}`,
+        { statusText },
+        {
+          headers: {
+            Authorization: `Bearer ${Baseurl.token}`,
+          },
+        },
+      )
+      .then((res) => {
+        if (res.data.status) {
+          toast.success(res.data.message);
+          queryClient.invalidateQueries("ordersData");
+        } else {
+          toast.error(res.data.message);
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
+
+  const renderStatusUpdateMenu = (orderId) => {
     return (
       <div className="flex gap-8">
-        <Popover __demoMode>
+        <Popover>
           <PopoverButton className="text-sm/6 font-semibold text-red-400 outline-none">
             Solutions
           </PopoverButton>
@@ -98,6 +120,11 @@ const OrdersPage = () => {
                 {orderStatus.map((button, i) => (
                   <button
                     key={i}
+                    type="button"
+                    onClick={() => {
+                      handleChangeOrderStatus(button, orderId);
+                      close();
+                    }}
                     className="px-6 py-1 text-start text-14size tracking-wide text-slate-600 hover:bg-gray-200"
                   >
                     {button}
@@ -141,8 +168,8 @@ const OrdersPage = () => {
               <TableBody>
                 {data.orders
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
-                    <TableRow key={row.id}>
+                  .map((row, index) => (
+                    <TableRow key={index}>
                       <TableCell component="th" scope="row">
                         <AvatarGroup max={3} className="flex w-max justify-end">
                           {row.orderItems.map((item, i) => (
@@ -169,13 +196,13 @@ const OrdersPage = () => {
                       </TableCell>
                       <TableCell align="center">
                         <span
-                          className={`inline-block ${row.status === "Preparing" ? "text-gray-600" : row.status === "Delivered" ? "text-green-500" : "text-orange-500"} font-semibold`}
+                          className={`inline-block ${row.status === "Pending" ? "text-gray-500" : row.status === "Confirmed" ? "text-indigo-500" : row.status === "Processing" ? "text-slate-700" : row.status === "Out for Delivery" ? "text-orange-400" : "text-green-600"} font-semibold`}
                         >
                           {row.status}
                         </span>
                       </TableCell>
                       <TableCell align="center">
-                        {renderStatusUpdateMenu()}
+                        {renderStatusUpdateMenu(row._id)}
                       </TableCell>
                     </TableRow>
                   ))}
