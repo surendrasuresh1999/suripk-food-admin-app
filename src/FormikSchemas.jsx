@@ -8,3 +8,8 @@ export const foodItemSchema = yup.object().shape({
     .required("Price is required")
     .matches(/^\d+(\.\d+)?$/, "Price must be a valid number"),
 });
+
+export const blogSchema = yup.object().shape({
+  title: yup.string().required("Title is required"),
+  discription: yup.string().required("Description is required"),
+});

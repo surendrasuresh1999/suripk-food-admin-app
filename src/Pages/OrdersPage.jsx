@@ -101,8 +101,8 @@ const OrdersPage = () => {
     return (
       <div className="flex gap-8">
         <Popover>
-          <PopoverButton className="text-sm/6 font-semibold text-red-400 outline-none">
-            Solutions
+          <PopoverButton className="text-sm/6 font-semibold text-orange-400 outline-none">
+            Update
           </PopoverButton>
           <Transition
             enter="transition ease-out duration-200"
@@ -125,7 +125,7 @@ const OrdersPage = () => {
                       handleChangeOrderStatus(button, orderId);
                       close();
                     }}
-                    className="px-6 py-1 text-start text-14size tracking-wide text-slate-600 hover:bg-gray-200"
+                    className="px-6 py-1 text-start text-14size font-semibold tracking-wide text-slate-600 hover:bg-gray-200"
                   >
                     {button}
                   </button>
