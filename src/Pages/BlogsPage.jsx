@@ -8,6 +8,7 @@ import ConnectionLost from "../Common/ConnectionLost";
 import Loader from "../Common/Loader";
 import axios from "axios";
 import toast from "react-hot-toast";
+import NodataFound from "../Common/NodataFound";
 
 const BlogsPage = () => {
   const [openBlogDialog, setOpenBlogDialog] = useState(false);
@@ -48,7 +49,7 @@ const BlogsPage = () => {
         toast.error(err.message);
       });
   };
-  
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
@@ -58,7 +59,7 @@ const BlogsPage = () => {
         <button
           type="button"
           onClick={() => setOpenBlogDialog(true)}
-          className="flex items-center justify-center gap-x-2 rounded-md bg-indigo-700 px-3.5 py-2.5 text-14size font-semibold tracking-wide text-white hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="flex items-center justify-center gap-x-2 rounded-md bg-indigo-700 px-3.5 py-2.5 text-14size font-semibold tracking-wide text-white hover:bg-indigo-600"
         >
           Create new blog
           <PlusCircleIcon className="-mr-0.5 h-5 w-5" />
@@ -69,7 +70,7 @@ const BlogsPage = () => {
           <Loader />
         ) : error ? (
           <ConnectionLost />
-        ) : (
+        ) : data.blogs?.length > 0 ? (
           <ul
             role="list"
             className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
@@ -78,6 +79,8 @@ const BlogsPage = () => {
               <BlogCard person={person} key={index} />
             ))}
           </ul>
+        ) : (
+          <NodataFound subTitle={"No blogs are added till now!"} />
         )}
       </div>
       {openBlogDialog && (

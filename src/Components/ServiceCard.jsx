@@ -17,14 +17,14 @@ const ServiceCard = ({ data }) => {
       </p>
       <h1 className="block truncate">
         <span className="flex items-center">
-          <UserCircleIcon className="h-5 w-5 text-gray-500" />: {data.name}
+          <UserCircleIcon className="h-6 w-6 text-gray-500" />: {data.name}
         </span>
       </h1>
       <p className="flex items-center gap-1 truncate">
-        <EnvelopeIcon className="h-5 w-5 text-gray-500" />:{data.email}
+        <EnvelopeIcon className="h-5 w-5 text-gray-500" />: {data.email}
       </p>
       <p className="flex items-center gap-1 truncate">
-        <PhoneIcon className="h-5 w-5 text-gray-500" />:{data.phone}
+        <PhoneIcon className="h-5 w-5 text-gray-500" />: {data.phone}
       </p>
       <p className="flex items-center gap-1 break-words">
         <MapPinIcon className="h-5 w-5 text-gray-500" />: {data.eventLocation}

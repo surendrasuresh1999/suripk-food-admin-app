@@ -8,7 +8,6 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { TableHead } from "@mui/material";
-import { StarIcon } from "@heroicons/react/16/solid";
 import { Baseurl } from "../BaseUrl";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Loader from "../Common/Loader";
@@ -24,12 +23,13 @@ import {
 } from "@headlessui/react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import NodataFound from "../Common/NodataFound";
 
 const tableHeadCells = [
   "Images",
   "Order_id",
-  "Rating",
   "Amount",
+  "Address",
   "Status",
   "Action",
 ];
@@ -99,9 +99,9 @@ const OrdersPage = () => {
 
   const renderStatusUpdateMenu = (orderId) => {
     return (
-      <div className="flex gap-8">
+      <div className="flex justify-center">
         <Popover>
-          <PopoverButton className="text-sm/6 font-semibold text-orange-400 outline-none">
+          <PopoverButton className="w-full rounded-md border border-orange-600 px-2 py-1 text-sm/6 font-semibold text-orange-400 outline-none">
             Update
           </PopoverButton>
           <Transition
@@ -183,17 +183,17 @@ const OrdersPage = () => {
                         </span>
                       </TableCell>
                       <TableCell align="left">
-                        <span className="flex items-center justify-center gap-1 text-14size">
-                          {row.ratingArr[0]?.value || 0}
-                          <StarIcon className="h-5 w-5 text-yellow-400" />
-                        </span>
-                      </TableCell>
-                      <TableCell align="left">
                         <span className="flex items-center gap-1 font-semibold">
                           <IndianRupeeIcon size={15} />
                           {row.totalAmount}
                         </span>
                       </TableCell>
+                      <TableCell align="left">
+                        <button className="break words block max-w-20 sm:max-w-60">
+                          {/* {row.discription} */}Delivery Address
+                        </button>
+                      </TableCell>
+
                       <TableCell align="center">
                         <span
                           className={`inline-block ${row.status === "Pending" ? "text-gray-500" : row.status === "Confirmed" ? "text-indigo-500" : row.status === "Processing" ? "text-slate-700" : row.status === "Out for Delivery" ? "text-orange-400" : "text-green-600"} font-semibold`}
@@ -224,7 +224,7 @@ const OrdersPage = () => {
             />
           </TableContainer>
         ) : (
-          <div>No data found</div>
+          <NodataFound subTitle={"No orders received till now!"} />
         )}
       </div>
       {openAddFoodDialog && (

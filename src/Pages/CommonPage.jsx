@@ -27,6 +27,7 @@ import {
 } from "@heroicons/react/20/solid";
 import Sidebar from "../Common/Sidebar";
 import { Outlet } from "react-router-dom";
+import { ChevronUpIcon } from "@heroicons/react/24/solid";
 
 const userNavigation = [
   { name: "Your profile", href: "#" },
@@ -39,7 +40,7 @@ function classNames(...classes) {
 const CommonPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
-    <div className="flex h-dvh flex-col">
+    <div className="relative flex min-h-dvh flex-col">
       <Transition show={sidebarOpen}>
         <Dialog className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
           <TransitionChild

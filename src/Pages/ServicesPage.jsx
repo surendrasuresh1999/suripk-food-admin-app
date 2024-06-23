@@ -4,6 +4,7 @@ import { Baseurl } from "../BaseUrl";
 import Loader from "../Common/Loader";
 import ConnectionLost from "../Common/ConnectionLost";
 import ServiceCard from "../Components/ServiceCard";
+import NodataFound from "../Common/NodataFound";
 
 const ServicesPage = () => {
   const queryClient = useQueryClient();
@@ -33,7 +34,7 @@ const ServicesPage = () => {
           <Loader />
         ) : error ? (
           <ConnectionLost />
-        ) : (
+        ) : data.services.length > 0 ? (
           <ul
             role="list"
             className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
@@ -42,6 +43,8 @@ const ServicesPage = () => {
               <ServiceCard data={service} key={index} />
             ))}
           </ul>
+        ) : (
+          <NodataFound subTitle={"There is no Services data found"} />
         )}
       </div>
     </div>

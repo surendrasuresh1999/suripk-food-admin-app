@@ -1,5 +1,5 @@
 import { PlusCircleIcon } from "@heroicons/react/20/solid";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import AddFoodDialog from "../Components/AddFoodDialog";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -18,6 +18,8 @@ import { IndianRupeeIcon } from "lucide-react";
 import swal from "sweetalert";
 import axios from "axios";
 import toast from "react-hot-toast";
+import NodataFound from "../Common/NodataFound";
+import { editableDataObj } from "../Store";
 
 const tableHeadCells = ["Image", "Title", "Description", "Price", "Action"];
 
@@ -53,17 +55,19 @@ const FoodItemsPage = () => {
     rowsPerPage -
     Math.min(rowsPerPage, data?.foodItems?.length - page * rowsPerPage);
 
-  const handleCreateFood = (foddData, actions) => {
-    axios
-      .post(
-        `${Baseurl.baseurl}/api/food`,
-        { foddData },
-        {
-          headers: {
-            Authorization: `Bearer ${Baseurl.token}`,
-          },
-        },
-      )
+  const handleCreateFood = (foddData, actions, actionType) => {
+    const httpMethod = actionType === "new" ? "POST" : "PUT";
+    const urlString =
+      actionType === "new" ? "food" : `food/${editableDataObj?.data?._id}`;
+
+    axios({
+      method: httpMethod,
+      url: `${Baseurl.baseurl}/api/${urlString}`,
+      data: foddData,
+      headers: {
+        Authorization: `Bearer ${Baseurl.token}`,
+      },
+    })
       .then((res) => {
         if (res.data.status) {
           toast.success(res.data.message);
@@ -173,7 +177,7 @@ const FoodItemsPage = () => {
                         <span className="block truncate">{row.title}</span>
                       </TableCell>
                       <TableCell align="left">
-                        <span className="break words block max-w-20 sm:max-w-60">
+                        <span className="block max-w-20 break-words sm:max-w-60">
                           {row.discription}
                         </span>
                       </TableCell>
@@ -185,7 +189,12 @@ const FoodItemsPage = () => {
                       </TableCell>
                       <TableCell align="center">
                         <div className="flex items-center justify-center gap-2">
-                          <button>
+                          <button
+                            onClick={() => {
+                              setOpenAddFoodDialog(true);
+                              editableDataObj.data = row;
+                            }}
+                          >
                             <PencilSquareIcon className="h-5 w-5 text-green-500" />
                           </button>
                           <button onClick={() => handleDeleteFood(row._id)}>
@@ -213,7 +222,7 @@ const FoodItemsPage = () => {
             />
           </TableContainer>
         ) : (
-          <div>No data found</div>
+          <NodataFound subTitle={"No fodd items data found!"} />
         )}
       </div>
       {openAddFoodDialog && (

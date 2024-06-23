@@ -1,80 +1,53 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import Slide from "@mui/material/Slide";
-import { forwardRef, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { foodItemSchema } from "../FormikSchemas";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { LoaderCircle } from "lucide-react";
-import { ArrowUpTrayIcon } from "@heroicons/react/16/solid";
 import toast from "react-hot-toast";
 import Transition from "../Common/Transition";
 import CloudinaryWidget from "../Common/CloudinaryWidget";
+import { ContextData, editableDataObj } from "../Store";
 
 const AddFoodDialog = ({ openDialog, setterFun, handler }) => {
-  const [showLoader, setShowLoader] = useState(false);
   const [foodImageurl, setFoodImageurl] = useState("");
-  const cloudinaryRef = useRef();
-  const widgetRef = useRef();
-
-  const foodObject = {
+  const context = useContext(ContextData);
+  const [foodObject, setFoodObject] = useState({
     title: "",
-    discription: "",
     price: "",
-  };
+    discription: "",
+  });
 
-  const handleUploadImage = () => {
-    setShowLoader(true);
-    cloudinaryRef.current = window.cloudinary;
-    widgetRef.current = cloudinaryRef.current.createUploadWidget(
-      {
-        // please note this don't use my credentials //
-        cloudName: "dplj90agk",
-        uploadPreset: "oblihw3n",
-        // please note this don't use my credentials //
-        uploadSignature: false,
-        multiple: false,
-        returnJustUrl: true,
-        closeAfterUpload: false,
-        sources: ["local", "url"],
-        resourceType: "image",
-      },
-      (error, result) => {
-        if (!error && result && result.event === "success") {
-          // console.log("Uploaded image URL:", result.info.url);
-          setFoodImageurl(result.info.url);
-          setShowLoader(false);
-        } else {
-          if (error !== undefined || error !== null) {
-            console.log("Error uploading image:", error);
-          }
-          setShowLoader(false);
-        }
-      },
-    );
-    widgetRef.current.open();
-    // Cleanup function
-    return () => {
-      if (widgetRef.current) {
-        widgetRef.current.close();
-      }
-    };
-  };
-
+  useEffect(() => {
+    if (Object.keys(context?.data).length !== 0 && openDialog) {
+      setFoodObject({
+        title: context?.data?.title,
+        price: context?.data?.price,
+        discription: context?.data?.discription,
+      });
+      setFoodImageurl(context?.data?.imageUrl);
+    }
+  }, [openDialog]);
   const handleFormSubmit = (values, actions) => {
     if (foodImageurl === "") {
       toast.error("Please upload a food image");
       actions.setSubmitting(false);
     } else {
       const data = { ...values, imageUrl: foodImageurl };
-      handler(data, actions);
+      const actionType =
+        Object.keys(context?.data).length === 0 ? "new" : "update";
+      handler(data, actions, actionType);
     }
   };
 
   return (
     <Dialog
       open={openDialog}
-      onClose={() => setterFun(false)}
+      onClose={() => {
+        setterFun(false);
+        editableDataObj.data = {};
+      }}
       TransitionComponent={Transition}
-      maxWidth="md"
+      maxWidth="sm"
       fullWidth={true}
     >
       <DialogTitle className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center sm:gap-0">
@@ -85,6 +58,7 @@ const AddFoodDialog = ({ openDialog, setterFun, handler }) => {
           initialValues={foodObject}
           validationSchema={foodItemSchema}
           onSubmit={handleFormSubmit}
+          enableReinitialize
         >
           {({ isSubmitting }) => (
             <Form className="flex flex-col gap-2">
@@ -97,12 +71,22 @@ const AddFoodDialog = ({ openDialog, setterFun, handler }) => {
                     {key.charAt(0).toUpperCase()}
                     {key.slice(1, key.length)}
                   </label>
-
-                  <Field
-                    type={key === "price" ? key : "text"}
-                    name={key}
-                    className="grow rounded-md border border-gray-400 p-1.5 outline-none"
-                  />
+                  {key === "discription" ? (
+                    <Field
+                      as={"textarea"}
+                      name={key}
+                      rows={2}
+                      cols={4}
+                      style={{ resize: "none" }}
+                      className="grow rounded-md border border-gray-400 p-1.5 outline-none"
+                    />
+                  ) : (
+                    <Field
+                      type={key === "price" ? key : "text"}
+                      name={key}
+                      className="grow rounded-md border border-gray-400 p-1.5 outline-none"
+                    />
+                  )}
                   <ErrorMessage
                     name={key}
                     render={(msg) => (
@@ -134,7 +118,7 @@ const AddFoodDialog = ({ openDialog, setterFun, handler }) => {
               )}
               <button
                 type="submit"
-                className="mt-2 flex items-center justify-center rounded-md bg-blue-500 py-2 text-14size font-medium tracking-wide text-white"
+                className="mt-3 flex items-center justify-center gap-x-2 rounded-md bg-indigo-700 px-3.5 py-2.5 text-14size font-semibold tracking-wide text-white hover:bg-indigo-600"
               >
                 {isSubmitting ? (
                   <LoaderCircle className="animate-spin text-white" size={21} />
