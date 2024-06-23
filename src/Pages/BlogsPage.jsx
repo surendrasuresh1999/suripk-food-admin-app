@@ -9,6 +9,7 @@ import Loader from "../Common/Loader";
 import axios from "axios";
 import toast from "react-hot-toast";
 import NodataFound from "../Common/NodataFound";
+import { editableDataObj } from "../Store";
 
 const BlogsPage = () => {
   const [openBlogDialog, setOpenBlogDialog] = useState(false);
@@ -27,14 +28,18 @@ const BlogsPage = () => {
     queryFn: fetchingBlogs,
   });
 
-  const handleCreateBlog = (blogData, actions) => {
-    // console.log("blog datat==========>", blogData);
-    axios
-      .post(`${Baseurl.baseurl}/api/blog`, blogData, {
-        headers: {
-          Authorization: `Bearer ${Baseurl.token}`,
-        },
-      })
+  const handleCreateBlog = (blogData, actions, action) => {
+    const httpMethod = action === "new" ? "POST" : "PUT";
+    const urlString =
+      action === "new" ? "blog" : `blog/update/${editableDataObj?.data?._id}`;
+    axios({
+      method: httpMethod,
+      url: `${Baseurl.baseurl}/api/${urlString}`,
+      data: blogData,
+      headers: {
+        Authorization: `Bearer ${Baseurl.token}`,
+      },
+    })
       .then((res) => {
         if (res.data.status) {
           queryClient.invalidateQueries("blogsData");
@@ -76,7 +81,11 @@ const BlogsPage = () => {
             className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
           >
             {data.blogs?.map((person, index) => (
-              <BlogCard person={person} key={index} />
+              <BlogCard
+                person={person}
+                key={index}
+                setter={setOpenBlogDialog}
+              />
             ))}
           </ul>
         ) : (

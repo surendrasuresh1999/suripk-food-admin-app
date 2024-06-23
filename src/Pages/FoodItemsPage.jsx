@@ -21,7 +21,14 @@ import toast from "react-hot-toast";
 import NodataFound from "../Common/NodataFound";
 import { editableDataObj } from "../Store";
 
-const tableHeadCells = ["Image", "Title", "Description", "Price", "Action"];
+const tableHeadCells = [
+  "Image",
+  "Title",
+  "Description",
+  "Rating",
+  "Price",
+  "Action",
+];
 
 const FoodItemsPage = () => {
   const [openAddFoodDialog, setOpenAddFoodDialog] = useState(false);
@@ -179,6 +186,11 @@ const FoodItemsPage = () => {
                       <TableCell align="left">
                         <span className="block max-w-20 break-words sm:max-w-60">
                           {row.discription}
+                        </span>
+                      </TableCell>
+                      <TableCell align="left">
+                        <span className="flex items-center justify-center gap-1 font-semibold">
+                          4🌟
                         </span>
                       </TableCell>
                       <TableCell align="left">

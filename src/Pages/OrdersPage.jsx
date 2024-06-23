@@ -123,7 +123,6 @@ const OrdersPage = () => {
                     type="button"
                     onClick={() => {
                       handleChangeOrderStatus(button, orderId);
-                      close();
                     }}
                     className="px-6 py-1 text-start text-14size font-semibold tracking-wide text-slate-600 hover:bg-gray-200"
                   >
@@ -137,6 +136,7 @@ const OrdersPage = () => {
       </div>
     );
   };
+  
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
@@ -144,89 +144,87 @@ const OrdersPage = () => {
           All orders
         </h1>
       </div>
-      <div>
-        {isPending ? (
-          <Loader />
-        ) : error ? (
-          <ConnectionLost />
-        ) : data.orders.length > 0 ? (
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  {tableHeadCells.map((cell, index) => (
-                    <TableCell
-                      key={index}
-                      align={index !== 4 ? "left" : "center"}
-                      sx={{ fontWeight: "bold", fontSize: "16px" }}
-                    >
-                      {cell}
+      {isPending ? (
+        <Loader />
+      ) : error ? (
+        <ConnectionLost />
+      ) : data.orders.length > 0 ? (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {tableHeadCells.map((cell, index) => (
+                  <TableCell
+                    key={index}
+                    align={index !== 4 ? "left" : "center"}
+                    sx={{ fontWeight: "bold", fontSize: "16px" }}
+                  >
+                    {cell}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data.orders
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => (
+                  <TableRow key={index}>
+                    <TableCell component="th" scope="row">
+                      <AvatarGroup max={3} className="flex w-max justify-end">
+                        {row.orderItems.map((item, i) => (
+                          <Avatar alt="cover-img" src={item.imageUrl} />
+                        ))}
+                      </AvatarGroup>
                     </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data.orders
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => (
-                    <TableRow key={index}>
-                      <TableCell component="th" scope="row">
-                        <AvatarGroup max={3} className="flex w-max justify-end">
-                          {row.orderItems.map((item, i) => (
-                            <Avatar alt="cover-img" src={item.imageUrl} />
-                          ))}
-                        </AvatarGroup>
-                      </TableCell>
-                      <TableCell align="left">
-                        <span className="block truncate text-indigo-500">
-                          {row.paymentInfo.orderId}
-                        </span>
-                      </TableCell>
-                      <TableCell align="left">
-                        <span className="flex items-center gap-1 font-semibold">
-                          <IndianRupeeIcon size={15} />
-                          {row.totalAmount}
-                        </span>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="break words block max-w-20 sm:max-w-60">
-                          {/* {row.discription} */}Delivery Address
-                        </button>
-                      </TableCell>
+                    <TableCell align="left">
+                      <span className="block truncate text-indigo-500">
+                        {row.paymentInfo.orderId}
+                      </span>
+                    </TableCell>
+                    <TableCell align="left">
+                      <span className="flex items-center gap-1 font-semibold">
+                        <IndianRupeeIcon size={15} />
+                        {row.totalAmount}
+                      </span>
+                    </TableCell>
+                    <TableCell align="left">
+                      <button className="break words block max-w-20 sm:max-w-60">
+                        Delivery Address
+                      </button>
+                    </TableCell>
 
-                      <TableCell align="center">
-                        <span
-                          className={`inline-block ${row.status === "Pending" ? "text-gray-500" : row.status === "Confirmed" ? "text-indigo-500" : row.status === "Processing" ? "text-slate-700" : row.status === "Out for Delivery" ? "text-orange-400" : "text-green-600"} font-semibold`}
-                        >
-                          {row.status}
-                        </span>
-                      </TableCell>
-                      <TableCell align="center">
-                        {renderStatusUpdateMenu(row._id)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={5} />
+                    <TableCell align="center">
+                      <span
+                        className={`inline-block ${row.status === "Pending" ? "text-gray-500" : row.status === "Confirmed" ? "text-indigo-500" : row.status === "Processing" ? "text-slate-700" : row.status === "Out for Delivery" ? "text-orange-400" : "text-green-600"} font-semibold`}
+                      >
+                        {row.status}
+                      </span>
+                    </TableCell>
+                    <TableCell align="center">
+                      {renderStatusUpdateMenu(row._id)}
+                    </TableCell>
                   </TableRow>
-                )}
-              </TableBody>
-            </Table>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={data.orders.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </TableContainer>
-        ) : (
-          <NodataFound subTitle={"No orders received till now!"} />
-        )}
-      </div>
+                ))}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={5} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={data.orders.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </TableContainer>
+      ) : (
+        <NodataFound subTitle={"No orders received till now!"} />
+      )}
       {openAddFoodDialog && (
         <AddFoodDialog
           openDialog={openAddFoodDialog}

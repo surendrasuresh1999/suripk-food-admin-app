@@ -1,9 +1,11 @@
+import { PencilSquareIcon } from "@heroicons/react/16/solid";
 import { HeartIcon } from "@heroicons/react/20/solid";
 import numeral from "numeral";
 import React from "react";
 import { Link } from "react-router-dom";
+import { editableDataObj } from "../Store";
 
-const BlogCard = ({ person }) => {
+const BlogCard = ({ person, setter }) => {
   return (
     <li
       key={person.email}
@@ -30,12 +32,23 @@ const BlogCard = ({ person }) => {
             )}
           </div>
           <p className="truncate text-sm text-gray-500">{person.discription}</p>
-          <Link
-            to={`/blogs/${person._id}`}
-            className="inline-block rounded-md border border-orange-300 bg-orange-50 px-3 py-2 text-sm font-semibold text-orange-600 shadow-sm hover:bg-orange-100"
-          >
-            Read More
-          </Link>
+          <div className="flex items-center justify-between">
+            <Link
+              to={`/blogs/${person._id}`}
+              className="inline-block rounded-md border border-orange-300 bg-orange-50 px-3 py-2 text-sm font-semibold text-orange-600 shadow-sm hover:bg-orange-100"
+            >
+              Read More
+            </Link>
+            <button
+              onClick={() => {
+                setter(true);
+                editableDataObj.data = person;
+              }}
+              className="rounded-md border bg-green-50 p-2"
+            >
+              <PencilSquareIcon className="h-5 w-5 text-green-500" />
+            </button>
+          </div>
         </div>
       </div>
     </li>

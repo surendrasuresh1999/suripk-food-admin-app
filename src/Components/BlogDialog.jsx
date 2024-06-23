@@ -1,30 +1,47 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CloudinaryWidget from "../Common/CloudinaryWidget";
 import { LoaderCircle } from "lucide-react";
 import { blogSchema } from "../FormikSchemas";
 import toast from "react-hot-toast";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import { ContextData, editableDataObj } from "../Store";
 
 const BlogDialog = ({ open, setter, handler }) => {
   const [foodImageurl, setFoodImageurl] = useState("");
-  const blogObj = {
+  const context = useContext(ContextData);
+  const [blogObj, setBlogObj] = useState({
     title: "",
     discription: "",
-  };
+  });
+
   const handleFormSubmit = (values, actions) => {
     if (foodImageurl === "") {
       toast.error("Please upload a food image");
       actions.setSubmitting(false);
     } else {
       const data = { ...values, imageUrl: foodImageurl };
-      handler(data, actions);
+      const actionType =
+        Object.keys(context?.data).length === 0 ? "new" : "update";
+      handler(data, actions, actionType);
     }
   };
+  useEffect(() => {
+    if (Object.keys(context?.data).length !== 0 && open) {
+      setBlogObj({
+        title: context?.data?.title,
+        discription: context?.data?.discription,
+      });
+      setFoodImageurl(context?.data?.imageUrl);
+    }
+  }, [open]);
   return (
     <Dialog
       open={open}
-      onClose={() => setter(false)}
+      onClose={() => {
+        setter(false);
+        editableDataObj.data = {};
+      }}
       maxWidth="sm"
       fullWidth={true}
     >
@@ -36,6 +53,7 @@ const BlogDialog = ({ open, setter, handler }) => {
           initialValues={blogObj}
           validationSchema={blogSchema}
           onSubmit={handleFormSubmit}
+          enableReinitialize
         >
           {({ isSubmitting }) => (
             <Form className="flex flex-col gap-2">
