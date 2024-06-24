@@ -124,7 +124,7 @@ const OrdersPage = () => {
                     onClick={() => {
                       handleChangeOrderStatus(button, orderId);
                     }}
-                    className="px-6 py-1 text-start text-14size font-semibold tracking-wide text-slate-600 hover:bg-gray-200"
+                    className="px-6 py-1 text-start text-14size font-semibold tracking-wide text-slate-600 hover:bg-gray-200 dark:text-white"
                   >
                     {button}
                   </button>
@@ -136,11 +136,11 @@ const OrdersPage = () => {
       </div>
     );
   };
-  
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
-        <h1 className="text-26size font-bold tracking-wide text-gray-700 sm:text-32size">
+        <h1 className="text-26size font-bold tracking-wide text-gray-700 dark:text-white sm:text-32size">
           All orders
         </h1>
       </div>
@@ -149,7 +149,7 @@ const OrdersPage = () => {
       ) : error ? (
         <ConnectionLost />
       ) : data.orders.length > 0 ? (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} className="bg-white dark:bg-gray-800">
           <Table>
             <TableHead>
               <TableRow>
@@ -158,6 +158,7 @@ const OrdersPage = () => {
                     key={index}
                     align={index !== 4 ? "left" : "center"}
                     sx={{ fontWeight: "bold", fontSize: "16px" }}
+                    className="text-black dark:text-white"
                   >
                     {cell}
                   </TableCell>
@@ -182,20 +183,20 @@ const OrdersPage = () => {
                       </span>
                     </TableCell>
                     <TableCell align="left">
-                      <span className="flex items-center gap-1 font-semibold">
+                      <span className="flex items-center gap-1 font-semibold text-black dark:text-white">
                         <IndianRupeeIcon size={15} />
                         {row.totalAmount}
                       </span>
                     </TableCell>
                     <TableCell align="left">
-                      <button className="break words block max-w-20 sm:max-w-60">
+                      <button className="break words block max-w-20 text-black dark:text-white sm:max-w-60">
                         Delivery Address
                       </button>
                     </TableCell>
 
                     <TableCell align="center">
                       <span
-                        className={`inline-block ${row.status === "Pending" ? "text-gray-500" : row.status === "Confirmed" ? "text-indigo-500" : row.status === "Processing" ? "text-slate-700" : row.status === "Out for Delivery" ? "text-orange-400" : "text-green-600"} font-semibold`}
+                        className={`inline-block ${row.status === "Pending" ? "text-gray-500" : row.status === "Confirmed" ? "text-indigo-500" : row.status === "Processing" ? "text-slate-700 dark:text-white" : row.status === "Out for Delivery" ? "text-orange-400" : "text-green-600"} font-semibold`}
                       >
                         {row.status}
                       </span>
@@ -207,7 +208,7 @@ const OrdersPage = () => {
                 ))}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={5} />
+                  <TableCell colSpan={tableHeadCells.length} />
                 </TableRow>
               )}
             </TableBody>
@@ -215,7 +216,9 @@ const OrdersPage = () => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
+            sx={{ display: "flex", justifyContent: "start" }}
             count={data.orders.length}
+            className="text-black dark:text-white"
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

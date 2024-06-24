@@ -58,7 +58,7 @@ const SubscribersPage = () => {
   const renderServiceCard = (project, i) => {
     return (
       <li key={i} className="col-span-1 flex-1 rounded-md shadow-sm">
-        <div className="flex items-center gap-2 overflow-hidden truncate rounded-md border border-gray-200 bg-white p-2">
+        <div className="flex items-center gap-2 overflow-hidden truncate rounded-md border border-gray-200 bg-white dark:bg-gray-800 p-2">
           <span className="inline-block h-12 w-12 shrink-0 overflow-hidden rounded-full">
             <svg
               className="h-full w-full text-gray-300"
@@ -69,8 +69,8 @@ const SubscribersPage = () => {
             </svg>
           </span>
           <div className="truncate">
-            <p className="block font-medium text-gray-900">{project.name}</p>
-            <p className="block truncate text-gray-500">{project.email}</p>
+            <p className="block font-medium text-gray-900 dark:text-white">{project.name}</p>
+            <p className="block truncate text-gray-500 dark:text-white">{project.email}</p>
           </div>
         </div>
       </li>
@@ -79,7 +79,7 @@ const SubscribersPage = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-26size font-bold tracking-wide text-gray-700 sm:text-32size">
+      <h1 className="text-26size font-bold tracking-wide text-gray-700 dark:text-white sm:text-32size">
         All Subscribers
       </h1>
       <div>

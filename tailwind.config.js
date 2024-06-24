@@ -3,7 +3,6 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      // colors: {},
       fontSize: {
         "36size": "36px",
         "34size": "34px",
@@ -23,4 +22,5 @@ export default {
     },
   },
   plugins: [require("@tailwindcss/forms")],
+  darkMode: "class",
 };

@@ -59,7 +59,7 @@ const BlogsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
-        <h1 className="text-26size font-bold tracking-wide text-gray-700 sm:text-32size">
+        <h1 className="text-26size font-bold tracking-wide text-gray-700 dark:text-white sm:text-32size">
           All Blogs
         </h1>
         <button

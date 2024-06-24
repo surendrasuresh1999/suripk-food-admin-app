@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogPanel,
@@ -13,7 +13,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, MoonIcon, SunIcon } from "@heroicons/react/20/solid";
 import Sidebar from "../Common/Sidebar";
 import { Outlet } from "react-router-dom";
-import { Switch } from "@headlessui/react";
+import { ChevronUpIcon } from "@heroicons/react/20/solid";
 
 const userNavigation = [
   { name: "Your profile", href: "#" },
@@ -25,9 +25,37 @@ function classNames(...classes) {
 }
 const CommonPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
   const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      console.log("sadfasdf", window.scrollY);
+      if (window.scrollY > 200) {
+        setShowScrollToTop(true);
+      } else {
+        setShowScrollToTop(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
-    <div className="relative flex min-h-dvh flex-col">
+    <div
+      className={`${enabled ? "dark" : ""} relative flex min-h-dvh flex-col`}
+    >
       <Transition show={sidebarOpen}>
         <Dialog className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
           <TransitionChild
@@ -74,7 +102,7 @@ const CommonPage = () => {
                   </div>
                 </TransitionChild>
                 {/* Sidebar component, swap this element with another sidebar if you like */}
-                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6 pb-4">
+                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6 pb-4 dark:bg-gray-800">
                   <div className="flex h-16 shrink-0 items-center">
                     <img
                       className="h-8 w-auto"
@@ -93,7 +121,7 @@ const CommonPage = () => {
       {/* Static sidebar for desktop */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
         {/* Sidebar component, swap this element with another sidebar if you like */}
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6 pb-4">
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r bg-indigo-600 px-6 pb-4 dark:bg-gray-800">
           <div className="flex h-16 shrink-0 items-center">
             <img
               className="h-8 w-auto"
@@ -106,7 +134,7 @@ const CommonPage = () => {
       </div>
 
       <div className="flex grow flex-col lg:pl-72">
-        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm dark:bg-gray-600 sm:gap-x-6 sm:px-6 lg:px-8">
           <button
             type="button"
             className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
@@ -118,56 +146,29 @@ const CommonPage = () => {
 
           <div className="flex flex-1 justify-end gap-x-4 self-stretch lg:gap-x-6">
             <div className="flex items-center gap-x-4 lg:gap-x-6">
-              <Switch
-                checked={enabled}
-                onChange={setEnabled}
-                className={classNames(
-                  enabled ? "bg-indigo-600" : "bg-gray-200",
-                  "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2",
-                )}
-              >
-                <span className="sr-only">Use setting</span>
-                <span
-                  className={classNames(
-                    enabled ? "translate-x-5" : "translate-x-0",
-                    "pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out",
-                  )}
-                >
-                  <span
-                    className={classNames(
-                      enabled
-                        ? "opacity-0 duration-100 ease-out"
-                        : "opacity-100 duration-200 ease-in",
-                      "absolute inset-0 flex h-full w-full items-center justify-center transition-opacity",
-                    )}
-                    aria-hidden="true"
-                  >
-                    <SunIcon className="h-5 w-5 text-gray-400" />
-                  </span>
-                  <span
-                    className={classNames(
-                      enabled
-                        ? "opacity-100 duration-200 ease-in"
-                        : "opacity-0 duration-100 ease-out",
-                      "absolute inset-0 flex h-full w-full items-center justify-center transition-opacity",
-                    )}
-                    aria-hidden="true"
-                  >
-                    <MoonIcon className="h-5 w-5 text-gray-400" />
-                  </span>
-                </span>
-              </Switch>
               <button
                 type="button"
-                className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+                onClick={() => setEnabled(!enabled)}
+                className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500 dark:text-white"
               >
                 <span className="sr-only">View notifications</span>
-                <BellIcon className="h-6 w-6" aria-hidden="true" />
+                {enabled ? (
+                  <MoonIcon className="h-6 w-6" />
+                ) : (
+                  <SunIcon className="h-6 w-6" />
+                )}
+              </button>
+              <button
+                type="button"
+                className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500 dark:text-white"
+              >
+                <span className="sr-only">View notifications</span>
+                <BellIcon className="h-6 w-6" />
               </button>
 
               {/* Separator */}
               <div
-                className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10"
+                className="hidden dark:bg-white lg:block lg:h-6 lg:w-px lg:bg-gray-400"
                 aria-hidden="true"
               />
 
@@ -182,13 +183,13 @@ const CommonPage = () => {
                   />
                   <span className="hidden lg:flex lg:items-center">
                     <span
-                      className="ml-4 text-sm font-semibold leading-6 text-gray-900"
+                      className="ml-4 text-sm font-semibold leading-6 text-gray-900 dark:text-white"
                       aria-hidden="true"
                     >
                       Tom Cook
                     </span>
                     <ChevronDownIcon
-                      className="ml-2 h-5 w-5 text-gray-400"
+                      className="ml-2 h-5 w-5 text-gray-400 dark:text-white"
                       aria-hidden="true"
                     />
                   </span>
@@ -201,15 +202,14 @@ const CommonPage = () => {
                   leaveFrom="transform opacity-100 scale-100"
                   leaveTo="transform opacity-0 scale-95"
                 >
-                  <MenuItems className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                  <MenuItems className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none dark:bg-gray-900">
                     {userNavigation.map((item) => (
                       <MenuItem key={item.name}>
                         {({ focus }) => (
                           <a
                             href={item.href}
                             className={classNames(
-                              focus ? "bg-gray-50" : "",
-                              "block px-3 py-1 text-sm leading-6 text-gray-900",
+                              "block px-3 py-1 text-sm leading-6 text-gray-900 dark:text-white dark:hover:bg-gray-500",
                             )}
                           >
                             {item.name}
@@ -224,12 +224,23 @@ const CommonPage = () => {
           </div>
         </div>
 
-        <div className="grow bg-slate-50 py-4">
+        <div className="grow bg-slate-50 py-4 dark:bg-gray-600">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <Outlet />
           </div>
         </div>
       </div>
+      {/* <button className="group fixed bottom-4 right-2 animate-bounce rounded-full border border-indigo-500 bg-indigo-50 p-2.5 hover:bg-indigo-200">
+        <ChevronUpIcon className="h-6 w-6 text-indigo-400 group-hover:text-indigo-600" />
+      </button> */}
+      {showScrollToTop && (
+        <button
+          className="group fixed bottom-4 right-2 animate-bounce rounded-full border border-indigo-500 bg-indigo-50 p-2.5 hover:bg-indigo-200"
+          onClick={scrollToTop}
+        >
+          <ChevronUpIcon className="h-6 w-6 text-indigo-400 group-hover:text-indigo-600" />
+        </button>
+      )}
     </div>
   );
 };

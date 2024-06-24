@@ -32,7 +32,7 @@ const BlogDetailsPage = () => {
         <ConnectionLost />
       ) : (
         <div className="space-y-4">
-          <h1 className="text-18size font-bold tracking-wide text-black sm:text-36size">
+          <h1 className="text-18size font-bold tracking-wide text-black dark:text-white sm:text-36size">
             {data.blogPost.title.charAt(0).toUpperCase() +
               data.blogPost.title.slice(1)}
           </h1>
@@ -41,7 +41,7 @@ const BlogDetailsPage = () => {
             alt="banner-img"
             className="max-h-96 w-full rounded-md object-cover object-center"
           />
-          <p className="text-justify text-gray-600">
+          <p className="text-justify text-gray-600 dark:text-white">
             {data.blogPost.discription}
           </p>
           <div className="flex items-center justify-between">

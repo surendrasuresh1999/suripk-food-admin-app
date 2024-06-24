@@ -118,8 +118,10 @@ const BlogDialog = ({ open, setter, handler }) => {
               >
                 {isSubmitting ? (
                   <LoaderCircle className="animate-spin text-white" size={21} />
-                ) : (
+                ) : Object.keys(context?.data).length === 0 ? (
                   "Create"
+                ) : (
+                  "Update"
                 )}
               </button>
             </Form>

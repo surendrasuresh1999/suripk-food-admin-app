@@ -11,10 +11,10 @@ const PageNotFound = () => {
             alt="page-not-found"
             className="h-64 w-auto object-center"
           />
-          <h1 className="text-3xl font-bold tracking-tight text-gray-600 sm:text-5xl">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-600 dark:text-white sm:text-5xl">
             Page not found
           </h1>
-          <p className="mt-4 text-base font-medium text-gray-900 sm:mt-6">
+          <p className="mt-4 text-base font-medium text-gray-900 dark:text-white sm:mt-6">
             Sorry, we couldn’t find the page you’re looking for.
           </p>
           <div className="mt-5 flex justify-center">

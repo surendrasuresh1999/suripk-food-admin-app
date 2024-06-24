@@ -50,7 +50,7 @@ const AddFoodDialog = ({ openDialog, setterFun, handler }) => {
       maxWidth="sm"
       fullWidth={true}
     >
-      <DialogTitle className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center sm:gap-0">
+      <DialogTitle className="flex flex-col justify-between gap-1 bg-transparent sm:flex-row sm:items-center sm:gap-0">
         Add New Food Item <CloudinaryWidget setterFun={setFoodImageurl} />
       </DialogTitle>
       <DialogContent dividers={true}>
@@ -122,6 +122,8 @@ const AddFoodDialog = ({ openDialog, setterFun, handler }) => {
               >
                 {isSubmitting ? (
                   <LoaderCircle className="animate-spin text-white" size={21} />
+                ) : Object.keys(context?.data).length !== 0 ? (
+                  "Update"
                 ) : (
                   "Submit"
                 )}

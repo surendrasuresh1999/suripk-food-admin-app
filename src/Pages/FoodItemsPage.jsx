@@ -98,6 +98,7 @@ const FoodItemsPage = () => {
       icon: "warning",
       buttons: true,
       dangerMode: true,
+      // className: "bg-white dark:bg-gray-900",
     }).then((willDelete) => {
       if (willDelete) {
         axios
@@ -136,7 +137,7 @@ const FoodItemsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
-        <h1 className="text-26size font-bold tracking-wide text-gray-700 sm:text-32size">
+        <h1 className="text-26size font-bold tracking-wide text-gray-700 dark:text-white sm:text-32size">
           All recepies
         </h1>
         <button
@@ -154,7 +155,10 @@ const FoodItemsPage = () => {
         ) : error ? (
           <ConnectionLost />
         ) : data.foodItems.length > 0 ? (
-          <TableContainer component={Paper}>
+          <TableContainer
+            component={Paper}
+            className="bg-white dark:bg-gray-800"
+          >
             <Table>
               <TableHead>
                 <TableRow>
@@ -163,6 +167,7 @@ const FoodItemsPage = () => {
                       key={index}
                       align={index !== 4 ? "left" : "center"}
                       sx={{ fontWeight: "bold", fontSize: "16px" }}
+                      className="text-black dark:text-white"
                     >
                       {cell}
                     </TableCell>
@@ -182,20 +187,22 @@ const FoodItemsPage = () => {
                         />
                       </TableCell>
                       <TableCell align="left">
-                        <span className="block truncate">{row.title}</span>
+                        <span className="block truncate text-black dark:text-white">
+                          {row.title}
+                        </span>
                       </TableCell>
                       <TableCell align="left">
-                        <span className="block max-w-20 break-words sm:max-w-60">
+                        <span className="block max-w-20 break-words text-black dark:text-white sm:max-w-60">
                           {row.discription}
                         </span>
                       </TableCell>
                       <TableCell align="left">
-                        <span className="flex items-center justify-center gap-1 font-semibold">
+                        <span className="flex items-center justify-center gap-1 font-semibold text-black dark:text-white">
                           4🌟
                         </span>
                       </TableCell>
                       <TableCell align="left">
-                        <span className="flex items-center gap-1 font-semibold">
+                        <span className="flex items-center gap-1 font-semibold text-black dark:text-white">
                           <IndianRupeeIcon size={15} />
                           {row.price}
                         </span>
@@ -211,7 +218,7 @@ const FoodItemsPage = () => {
                             <PencilSquareIcon className="h-5 w-5 text-green-500" />
                           </button>
                           <button onClick={() => handleDeleteFood(row._id)}>
-                            <TrashIcon className="h-5 w-5 text-gray-500" />
+                            <TrashIcon className="h-5 w-5 text-red-500" />
                           </button>
                         </div>
                       </TableCell>
@@ -219,7 +226,7 @@ const FoodItemsPage = () => {
                   ))}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 50 * emptyRows }}>
-                    <TableCell colSpan={5} />
+                    <TableCell colSpan={tableHeadCells.length} />
                   </TableRow>
                 )}
               </TableBody>
@@ -227,8 +234,10 @@ const FoodItemsPage = () => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
+              sx={{ display: "flex", justifyContent: "start" }}
               count={data.foodItems.length}
               rowsPerPage={rowsPerPage}
+              className="text-black dark:text-white"
               page={page}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}

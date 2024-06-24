@@ -9,10 +9,12 @@ const NodataFound = ({ subTitle }) => {
         alt="no-data-img"
         className="h-44 object-cover object-center sm:h-64"
       />
-      <h1 className="text-18size font-bold text-gray-900 sm:text-22size">
+      <h1 className="text-18size font-bold text-gray-900 dark:text-white sm:text-22size">
         No data found
       </h1>
-      <p className="text-16size font-medium tracking-wide text-gray-500">{subTitle}</p>
+      <p className="text-16size font-medium tracking-wide text-gray-500 dark:text-white">
+        {subTitle}
+      </p>
     </div>
   );
 };

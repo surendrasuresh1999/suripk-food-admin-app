@@ -89,43 +89,42 @@ const cards = [
   },
 ];
 
-function CustomTooltip({ active, payload, label }) {
-  if (active) {
+const DashboardPage = () => {
+  function CustomTooltip({ active, payload, label }) {
+    if (active) {
+      return (
+        <div
+          className={`shadow-white-50 flex flex-col items-start gap-1 rounded-md bg-gray-400 px-4 py-2 shadow-lg`}
+        >
+          {payload.map((payload, index) => (
+            <p key={index} className="text-mediumSize mt-0 text-white">
+              {payload?.name}:{" "}
+              <b className="tracking-wide">
+                {numeral(payload?.value).format("0.a")}
+              </b>
+            </p>
+          ))}
+        </div>
+      );
+    }
+  }
+
+  function YAxisContentWrapper({ x, y, payload }) {
     return (
-      <div
-        className={`bg-gray-400 shadow-white-50 flex flex-col items-start gap-1 rounded-md px-4 py-2 shadow-lg`}
-      >
-        {payload.map((payload, index) => (
-          <p key={index} className="text-mediumSize mt-0 text-white">
-            {payload?.name}:{" "}
-            <b className="tracking-wide">
-              {numeral(payload?.value).format("0.a")}
-            </b>
-          </p>
-        ))}
-      </div>
+      <g transform={`translate(${x},${y})`}>
+        <text x={-1} y={0} dy={5} textAnchor="end" fill="#868686" className="text-red-400">
+          {numeral(payload.value).format("0.a")}
+        </text>
+      </g>
     );
   }
-}
-
-function YAxisContentWrapper({ x, y, payload }) {
-  return (
-    <g transform={`translate(${x},${y})`}>
-      <text x={-1} y={0} dy={5} textAnchor="end" fill="#666">
-        {numeral(payload.value).format("0.a")}
-      </text>
-    </g>
-  );
-}
-
-const DashboardPage = () => {
   return (
     <div className="space-y-6">
       <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((data, i) => (
           <li
             key={i}
-            className={`space-y-4 rounded-md ${data.gradientFrom} shadow p-2`}
+            className={`space-y-4 rounded-md ${data.gradientFrom} p-2 shadow`}
           >
             <div className="flex items-center justify-between">
               <div>
@@ -149,8 +148,10 @@ const DashboardPage = () => {
           </li>
         ))}
       </ul>
-      <div className="rounded-lg bg-white p-2 shadow space-y-5">
-        <h1 className="text-24size font-semibold text-gray-700">Orders graph</h1>
+      <div className="space-y-5 rounded-lg bg-white p-2 shadow dark:bg-gray-900">
+        <h1 className="text-24size font-semibold text-gray-700 dark:text-white">
+          Orders graph
+        </h1>
         <ResponsiveContainer width="100%" height={250}>
           <LineChart
             width={600}
@@ -169,8 +170,8 @@ const DashboardPage = () => {
           </LineChart>
         </ResponsiveContainer>
       </div>
-      <div className="rounded-lg bg-white p-2 shadow space-y-5">
-        <h1 className="text-24size font-semibold text-gray-700">Users graph</h1>
+      <div className="space-y-5 rounded-lg bg-white dark:bg-gray-900 p-2 shadow">
+        <h1 className="text-24size font-semibold text-gray-700 dark:text-white">Users graph</h1>
         <ResponsiveContainer width="100%" height={250}>
           <LineChart
             width={600}

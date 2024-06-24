@@ -45,8 +45,8 @@ const Sidebar = () => {
                   to={item.path}
                   className={classNames(
                     item.path === loaction.pathname
-                      ? "bg-indigo-700 text-white"
-                      : "text-indigo-200 hover:bg-indigo-700 hover:text-white",
+                      ? "bg-indigo-700 dark:bg-gray-700 text-white"
+                      : "text-indigo-200 hover:bg-indigo-700 dark:hover:bg-gray-700 hover:text-white",
                     "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6",
                   )}
                 >
@@ -68,7 +68,7 @@ const Sidebar = () => {
         <li className="mt-auto">
           <a
             href="#"
-            className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-indigo-200 hover:bg-indigo-700 hover:text-white"
+            className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-indigo-200 hover:bg-indigo-700 hover:text-white dark:hover:bg-gray-700"
           >
             <Cog6ToothIcon
               className="h-6 w-6 shrink-0 text-indigo-200 group-hover:text-white"

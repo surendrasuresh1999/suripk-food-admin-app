@@ -9,7 +9,7 @@ const BlogCard = ({ person, setter }) => {
   return (
     <li
       key={person.email}
-      className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow"
+      className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white dark:bg-gray-800 shadow"
     >
       <div className="p-4">
         <div className="h-56">
@@ -21,7 +21,7 @@ const BlogCard = ({ person, setter }) => {
         </div>
         <div className="flex-1 space-y-2 truncate pt-3">
           <div className="flex items-center justify-between">
-            <h3 className="truncate text-18size font-medium text-gray-900">
+            <h3 className="truncate text-18size font-medium text-gray-900 dark:text-white">
               {person.title}
             </h3>
             {person.likedUsers?.length > 0 && (
@@ -31,7 +31,7 @@ const BlogCard = ({ person, setter }) => {
               </span>
             )}
           </div>
-          <p className="truncate text-sm text-gray-500">{person.discription}</p>
+          <p className="truncate text-sm text-gray-500 dark:text-white">{person.discription}</p>
           <div className="flex items-center justify-between">
             <Link
               to={`/blogs/${person._id}`}
