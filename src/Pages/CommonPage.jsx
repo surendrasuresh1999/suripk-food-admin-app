@@ -9,25 +9,11 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import {
-  Bars3Icon,
-  BellIcon,
-  CalendarIcon,
-  ChartPieIcon,
-  Cog6ToothIcon,
-  DocumentDuplicateIcon,
-  FolderIcon,
-  HomeIcon,
-  UsersIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/20/solid";
+import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon, MoonIcon, SunIcon } from "@heroicons/react/20/solid";
 import Sidebar from "../Common/Sidebar";
 import { Outlet } from "react-router-dom";
-import { ChevronUpIcon } from "@heroicons/react/24/solid";
+import { Switch } from "@headlessui/react";
 
 const userNavigation = [
   { name: "Your profile", href: "#" },
@@ -39,6 +25,7 @@ function classNames(...classes) {
 }
 const CommonPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [enabled, setEnabled] = useState(false);
   return (
     <div className="relative flex min-h-dvh flex-col">
       <Transition show={sidebarOpen}>
@@ -131,6 +118,45 @@ const CommonPage = () => {
 
           <div className="flex flex-1 justify-end gap-x-4 self-stretch lg:gap-x-6">
             <div className="flex items-center gap-x-4 lg:gap-x-6">
+              <Switch
+                checked={enabled}
+                onChange={setEnabled}
+                className={classNames(
+                  enabled ? "bg-indigo-600" : "bg-gray-200",
+                  "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2",
+                )}
+              >
+                <span className="sr-only">Use setting</span>
+                <span
+                  className={classNames(
+                    enabled ? "translate-x-5" : "translate-x-0",
+                    "pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out",
+                  )}
+                >
+                  <span
+                    className={classNames(
+                      enabled
+                        ? "opacity-0 duration-100 ease-out"
+                        : "opacity-100 duration-200 ease-in",
+                      "absolute inset-0 flex h-full w-full items-center justify-center transition-opacity",
+                    )}
+                    aria-hidden="true"
+                  >
+                    <SunIcon className="h-5 w-5 text-gray-400" />
+                  </span>
+                  <span
+                    className={classNames(
+                      enabled
+                        ? "opacity-100 duration-200 ease-in"
+                        : "opacity-0 duration-100 ease-out",
+                      "absolute inset-0 flex h-full w-full items-center justify-center transition-opacity",
+                    )}
+                    aria-hidden="true"
+                  >
+                    <MoonIcon className="h-5 w-5 text-gray-400" />
+                  </span>
+                </span>
+              </Switch>
               <button
                 type="button"
                 className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"

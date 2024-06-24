@@ -46,6 +46,7 @@ const BlogsPage = () => {
           toast.success(res.data.message);
           setOpenBlogDialog(false);
           actions.setSubmitting(false);
+          editableDataObj.data = {}
         } else {
           toast.error(res.data.message);
         }

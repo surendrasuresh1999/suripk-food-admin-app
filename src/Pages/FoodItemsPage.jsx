@@ -81,6 +81,7 @@ const FoodItemsPage = () => {
           queryClient.invalidateQueries("foodItemsData");
           setOpenAddFoodDialog(false);
           actions.resetForm();
+          editableDataObj.data = {};
         } else {
           toast.error(res.data.message);
         }
