@@ -5,11 +5,11 @@ import { LoaderCircle } from "lucide-react";
 import { blogSchema } from "../FormikSchemas";
 import toast from "react-hot-toast";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { ContextData, editableDataObj } from "../Store";
+import Context from "../Context/Context";
 
 const BlogDialog = ({ open, setter, handler }) => {
   const [foodImageurl, setFoodImageurl] = useState("");
-  const context = useContext(ContextData);
+  const { editableObj, setEditableObj, defaultMode } = useContext(Context);
   const [blogObj, setBlogObj] = useState({
     title: "",
     discription: "",
@@ -22,17 +22,17 @@ const BlogDialog = ({ open, setter, handler }) => {
     } else {
       const data = { ...values, imageUrl: foodImageurl };
       const actionType =
-        Object.keys(context?.data).length === 0 ? "new" : "update";
+        Object.keys(editableObj).length === 0 ? "new" : "update";
       handler(data, actions, actionType);
     }
   };
   useEffect(() => {
-    if (Object.keys(context?.data).length !== 0 && open) {
+    if (Object.keys(editableObj).length !== 0 && open) {
       setBlogObj({
-        title: context?.data?.title,
-        discription: context?.data?.discription,
+        title: editableObj?.title,
+        discription: editableObj?.discription,
       });
-      setFoodImageurl(context?.data?.imageUrl);
+      setFoodImageurl(editableObj?.imageUrl);
     }
   }, [open]);
   return (
@@ -40,15 +40,20 @@ const BlogDialog = ({ open, setter, handler }) => {
       open={open}
       onClose={() => {
         setter(false);
-        editableDataObj.data = {};
+        setEditableObj({});
       }}
       maxWidth="sm"
       fullWidth={true}
     >
-      <DialogTitle className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center sm:gap-0">
+      <DialogTitle
+        className={`flex flex-col justify-between ${defaultMode ? "border-b bg-gray-900 text-white" : "bg-white text-gray-800"} gap-1 sm:flex-row sm:items-center sm:gap-0`}
+      >
         Add New Blog <CloudinaryWidget setterFun={setFoodImageurl} />
       </DialogTitle>
-      <DialogContent dividers={true}>
+      <DialogContent
+        dividers={true}
+        className={`${defaultMode ? "bg-gray-900 text-white" : "bg-white text-gray-800"}`}
+      >
         <Formik
           initialValues={blogObj}
           validationSchema={blogSchema}
@@ -61,7 +66,7 @@ const BlogDialog = ({ open, setter, handler }) => {
                 <div key={index} className="flex flex-col gap-1">
                   <label
                     htmlFor={key}
-                    className="flex items-center gap-1 text-14size font-semibold tracking-wide text-black sm:text-16size"
+                    className={`flex items-center gap-1 text-14size font-semibold tracking-wide ${defaultMode ? "text-white" : "text-black"} sm:text-16size`}
                   >
                     {key.charAt(0).toUpperCase()}
                     {key.slice(1, key.length)}
@@ -71,7 +76,7 @@ const BlogDialog = ({ open, setter, handler }) => {
                     <Field
                       type={"text"}
                       name={key}
-                      className="grow rounded-md border border-gray-400 p-1.5 outline-none"
+                      className={`grow rounded-md border border-gray-400 ${defaultMode ? "bg-gray-500" : "bg-white"} p-1.5 text-white outline-none`}
                     />
                   ) : (
                     <Field
@@ -80,14 +85,14 @@ const BlogDialog = ({ open, setter, handler }) => {
                       rows={3}
                       cols={4}
                       style={{ resize: "none" }}
-                      className="grow rounded-md border border-gray-400 p-1.5 outline-none"
+                      className={`grow rounded-md border border-gray-400 text-white ${defaultMode ? "bg-gray-500" : "bg-white"} p-1.5 outline-none`}
                     />
                   )}
 
                   <ErrorMessage
                     name={key}
                     render={(msg) => (
-                      <p className="font-500 text-12size tracking-wide text-red-600">
+                      <p className="text-12size font-bold tracking-wide text-red-600">
                         {msg}
                       </p>
                     )}
@@ -118,7 +123,7 @@ const BlogDialog = ({ open, setter, handler }) => {
               >
                 {isSubmitting ? (
                   <LoaderCircle className="animate-spin text-white" size={21} />
-                ) : Object.keys(context?.data).length === 0 ? (
+                ) : Object.keys(editableObj).length === 0 ? (
                   "Create"
                 ) : (
                   "Update"

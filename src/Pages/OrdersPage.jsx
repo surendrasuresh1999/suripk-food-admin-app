@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import AddFoodDialog from "../Components/AddFoodDialog";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -24,6 +24,7 @@ import {
 import axios from "axios";
 import toast from "react-hot-toast";
 import NodataFound from "../Common/NodataFound";
+import Context from "../Context/Context";
 
 const tableHeadCells = [
   "Images",
@@ -45,6 +46,7 @@ const OrdersPage = () => {
   const [openAddFoodDialog, setOpenAddFoodDialog] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const { defaultMode } = useContext(Context);
   const queryClient = useQueryClient();
 
   const fetchAllOrders = async () => {
@@ -114,7 +116,7 @@ const OrdersPage = () => {
           >
             <PopoverPanel
               anchor="bottom"
-              className="popover-shadow divide-y divide-white/5 rounded-md bg-white text-sm/6 [--anchor-gap:var(--spacing-5)]"
+              className={`popover-shadow divide-y divide-white/5 rounded-md ${defaultMode ? "bg-gray-900 text-white" : "bg-white text-black"} text-sm/6 [--anchor-gap:var(--spacing-5)]`}
             >
               <div className="flex flex-col justify-start gap-2 py-2">
                 {orderStatus.map((button, i) => (
@@ -124,7 +126,7 @@ const OrdersPage = () => {
                     onClick={() => {
                       handleChangeOrderStatus(button, orderId);
                     }}
-                    className="px-6 py-1 text-start text-14size font-semibold tracking-wide text-slate-600 hover:bg-gray-200 dark:text-white"
+                    className={`px-6 py-1 text-start text-14size font-semibold tracking-wide ${defaultMode ? "text-white hover:bg-gray-700" : "text-slate-600 hover:bg-gray-200"} `}
                   >
                     {button}
                   </button>

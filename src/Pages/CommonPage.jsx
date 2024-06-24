@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Dialog,
   DialogPanel,
@@ -14,6 +14,7 @@ import { ChevronDownIcon, MoonIcon, SunIcon } from "@heroicons/react/20/solid";
 import Sidebar from "../Common/Sidebar";
 import { Outlet } from "react-router-dom";
 import { ChevronUpIcon } from "@heroicons/react/20/solid";
+import Context from "../Context/Context";
 
 const userNavigation = [
   { name: "Your profile", href: "#" },
@@ -26,7 +27,7 @@ function classNames(...classes) {
 const CommonPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
-  const [enabled, setEnabled] = useState(false);
+  const { defaultMode, setDefaultMode } = useContext(Context);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,7 +55,7 @@ const CommonPage = () => {
 
   return (
     <div
-      className={`${enabled ? "dark" : ""} relative flex min-h-dvh flex-col`}
+      className={`${defaultMode ? "dark" : ""} relative flex min-h-dvh flex-col`}
     >
       <Transition show={sidebarOpen}>
         <Dialog className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
@@ -102,7 +103,9 @@ const CommonPage = () => {
                   </div>
                 </TransitionChild>
                 {/* Sidebar component, swap this element with another sidebar if you like */}
-                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6 pb-4 dark:bg-gray-800">
+                <div
+                  className={`flex grow flex-col gap-y-5 overflow-y-auto ${defaultMode ? "bg-gray-800" : "bg-indigo-600"} px-6 pb-4`}
+                >
                   <div className="flex h-16 shrink-0 items-center">
                     <img
                       className="h-8 w-auto"
@@ -137,7 +140,7 @@ const CommonPage = () => {
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm dark:bg-gray-600 sm:gap-x-6 sm:px-6 lg:px-8">
           <button
             type="button"
-            className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+            className="-m-2.5 p-2.5 text-gray-700 dark:text-white lg:hidden"
             onClick={() => setSidebarOpen(true)}
           >
             <span className="sr-only">Open sidebar</span>
@@ -148,11 +151,13 @@ const CommonPage = () => {
             <div className="flex items-center gap-x-4 lg:gap-x-6">
               <button
                 type="button"
-                onClick={() => setEnabled(!enabled)}
+                onClick={() => {
+                  setDefaultMode(!defaultMode);
+                }}
                 className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500 dark:text-white"
               >
                 <span className="sr-only">View notifications</span>
-                {enabled ? (
+                {defaultMode ? (
                   <MoonIcon className="h-6 w-6" />
                 ) : (
                   <SunIcon className="h-6 w-6" />

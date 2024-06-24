@@ -7,7 +7,9 @@ import {
   HomeIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
+import { useContext } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import Context from "../Context/Context";
 
 const navigation = [
   { name: "Dashboard", path: "/", icon: HomeIcon, current: true },
@@ -33,6 +35,7 @@ function classNames(...classes) {
 }
 
 const Sidebar = () => {
+  const { defaultMode } = useContext(Context);
   const loaction = useLocation();
   return (
     <nav className="flex flex-1 flex-col">
@@ -45,8 +48,8 @@ const Sidebar = () => {
                   to={item.path}
                   className={classNames(
                     item.path === loaction.pathname
-                      ? "bg-indigo-700 dark:bg-gray-700 text-white"
-                      : "text-indigo-200 hover:bg-indigo-700 dark:hover:bg-gray-700 hover:text-white",
+                      ? ` ${defaultMode ? "bg-gray-700" : "bg-indigo-700"} text-white`
+                      : `text-indigo-200 ${defaultMode ? "hover:bg-gray-700" : "hover:bg-indigo-700"} hover:text-white dark:hover:bg-gray-700`,
                     "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6",
                   )}
                 >
@@ -68,7 +71,7 @@ const Sidebar = () => {
         <li className="mt-auto">
           <a
             href="#"
-            className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-indigo-200 hover:bg-indigo-700 hover:text-white dark:hover:bg-gray-700"
+            className={`group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold ${defaultMode ? "hover:bg-gray-700" : "hover:bg-indigo-700"} leading-6 text-indigo-200 hover:text-white`}
           >
             <Cog6ToothIcon
               className="h-6 w-6 shrink-0 text-indigo-200 group-hover:text-white"

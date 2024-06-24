@@ -6,11 +6,11 @@ import { LoaderCircle } from "lucide-react";
 import toast from "react-hot-toast";
 import Transition from "../Common/Transition";
 import CloudinaryWidget from "../Common/CloudinaryWidget";
-import { ContextData, editableDataObj } from "../Store";
+import Context from "../Context/Context";
 
 const AddFoodDialog = ({ openDialog, setterFun, handler }) => {
   const [foodImageurl, setFoodImageurl] = useState("");
-  const context = useContext(ContextData);
+  const { editableObj, setEditableObj, defaultMode } = useContext(Context);
   const [foodObject, setFoodObject] = useState({
     title: "",
     price: "",
@@ -18,13 +18,13 @@ const AddFoodDialog = ({ openDialog, setterFun, handler }) => {
   });
 
   useEffect(() => {
-    if (Object.keys(context?.data).length !== 0 && openDialog) {
+    if (Object.keys(editableObj).length !== 0 && openDialog) {
       setFoodObject({
-        title: context?.data?.title,
-        price: context?.data?.price,
-        discription: context?.data?.discription,
+        title: editableObj?.title,
+        price: editableObj?.price,
+        discription: editableObj?.discription,
       });
-      setFoodImageurl(context?.data?.imageUrl);
+      setFoodImageurl(editableObj?.imageUrl);
     }
   }, [openDialog]);
   const handleFormSubmit = (values, actions) => {
@@ -34,7 +34,7 @@ const AddFoodDialog = ({ openDialog, setterFun, handler }) => {
     } else {
       const data = { ...values, imageUrl: foodImageurl };
       const actionType =
-        Object.keys(context?.data).length === 0 ? "new" : "update";
+        Object.keys(editableObj).length === 0 ? "new" : "update";
       handler(data, actions, actionType);
     }
   };
@@ -44,16 +44,21 @@ const AddFoodDialog = ({ openDialog, setterFun, handler }) => {
       open={openDialog}
       onClose={() => {
         setterFun(false);
-        editableDataObj.data = {};
+        setEditableObj({});
       }}
       TransitionComponent={Transition}
       maxWidth="sm"
       fullWidth={true}
     >
-      <DialogTitle className="flex flex-col justify-between gap-1 bg-transparent sm:flex-row sm:items-center sm:gap-0">
+      <DialogTitle
+        className={`flex flex-col justify-between ${defaultMode ? "border-b bg-gray-900 text-white" : "bg-white text-gray-800"} gap-1 sm:flex-row sm:items-center sm:gap-0`}
+      >
         Add New Food Item <CloudinaryWidget setterFun={setFoodImageurl} />
       </DialogTitle>
-      <DialogContent dividers={true}>
+      <DialogContent
+        dividers={true}
+        className={`${defaultMode ? "bg-gray-900 text-white" : "bg-white text-gray-800"}`}
+      >
         <Formik
           initialValues={foodObject}
           validationSchema={foodItemSchema}
@@ -66,7 +71,7 @@ const AddFoodDialog = ({ openDialog, setterFun, handler }) => {
                 <div key={index} className="flex flex-col gap-1">
                   <label
                     htmlFor={key}
-                    className="flex items-center gap-1 text-14size font-semibold tracking-wide text-black sm:text-16size"
+                    className={`flex items-center gap-1 text-14size font-semibold tracking-wide ${defaultMode ? "text-white" : "text-black"} sm:text-16size`}
                   >
                     {key.charAt(0).toUpperCase()}
                     {key.slice(1, key.length)}
@@ -78,19 +83,19 @@ const AddFoodDialog = ({ openDialog, setterFun, handler }) => {
                       rows={2}
                       cols={4}
                       style={{ resize: "none" }}
-                      className="grow rounded-md border border-gray-400 p-1.5 outline-none"
+                      className={`grow rounded-md border border-gray-400 text-white ${defaultMode ? "bg-gray-500" : "bg-white"} p-1.5 outline-none`}
                     />
                   ) : (
                     <Field
                       type={key === "price" ? key : "text"}
                       name={key}
-                      className="grow rounded-md border border-gray-400 p-1.5 outline-none"
+                      className={`grow rounded-md border border-gray-400 ${defaultMode ? "bg-gray-500" : "bg-white"} p-1.5 text-white outline-none`}
                     />
                   )}
                   <ErrorMessage
                     name={key}
                     render={(msg) => (
-                      <p className="font-500 text-12size tracking-wide text-red-600">
+                      <p className="text-12size font-bold tracking-wide text-red-600">
                         {msg}
                       </p>
                     )}
@@ -122,7 +127,7 @@ const AddFoodDialog = ({ openDialog, setterFun, handler }) => {
               >
                 {isSubmitting ? (
                   <LoaderCircle className="animate-spin text-white" size={21} />
-                ) : Object.keys(context?.data).length !== 0 ? (
+                ) : Object.keys(editableObj).length !== 0 ? (
                   "Update"
                 ) : (
                   "Submit"

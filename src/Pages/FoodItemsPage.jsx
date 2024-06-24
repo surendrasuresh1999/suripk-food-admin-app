@@ -98,7 +98,6 @@ const FoodItemsPage = () => {
       icon: "warning",
       buttons: true,
       dangerMode: true,
-      // className: "bg-white dark:bg-gray-900",
     }).then((willDelete) => {
       if (willDelete) {
         axios
