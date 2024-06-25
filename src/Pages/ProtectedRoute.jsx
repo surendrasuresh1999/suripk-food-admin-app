@@ -1,9 +1,14 @@
-import React from 'react'
+import React from "react";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 const ProtectedRoute = () => {
-  return (
-    <div>ProtectedRoute</div>
-  )
-}
+  const userInfo = localStorage.getItem("foodieAdminUserDetails");
+  const location = useLocation();
+  return userInfo ? (
+    <Outlet />
+  ) : (
+    <Navigate to={"/login"} state={{ from: location }} replace />
+  );
+};
 
-export default ProtectedRoute
+export default ProtectedRoute;

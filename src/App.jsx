@@ -11,21 +11,24 @@ import DashboardPage from "./Pages/DashboardPage";
 import BlogDetailsPage from "./Pages/BlogDetailsPage";
 import UsersPage from "./Pages/UsersPage";
 import Login from "./Pages/Login";
+import ProtectedRoute from "./Pages/ProtectedRoute";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route path="/" element={<CommonPage />}>
-        <Route index element={<DashboardPage />} />
-        <Route path="/all-recepies" element={<FoodItemsPage />} />
-        <Route path="/orders" element={<OrdersPage />} />
-        <Route path="/services" element={<ServicesPage />} />
-        <Route path="/blogs" element={<BlogsPage />} />
-        <Route path="/blogs/:id" element={<BlogDetailsPage />} />
-        <Route path="/subscribers" element={<SubscribersPage />} />
-        <Route path="/users" element={<UsersPage />} />
-        <Route path="*" element={<PageNotFound />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="" element={<CommonPage />}>
+          <Route index element={<DashboardPage />} />
+          <Route path="/all-recepies" element={<FoodItemsPage />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/blogs" element={<BlogsPage />} />
+          <Route path="/blogs/:id" element={<BlogDetailsPage />} />
+          <Route path="/subscribers" element={<SubscribersPage />} />
+          <Route path="/users" element={<UsersPage />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Route>
       </Route>
     </Routes>
   );

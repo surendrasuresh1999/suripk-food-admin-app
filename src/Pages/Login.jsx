@@ -16,21 +16,20 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleFormSubmit = (values, actions) => {
-    // console.log(values);
     axios
       .post(`${Baseurl.baseurl}/api/admin/login`, values)
       .then((res) => {
         if (res.data.status) {
           localStorage.setItem(
             "foodieAdminUserDetails",
-            JSON.stringify(res.data.user),
+            JSON.stringify(res.data.isAdminExist),
           );
-          Cookies.set("jwtToken", res.data.token, { expires: 120 });
+          Cookies.set("adminJwtToken", res.data.token, { expires: 120 });
           navigate("/");
           actions.resetForm();
         } else {
           toast.error(res.data.message);
-          console.log("res", res);
+          console.log("res", res.data.message);
           actions.setSubmitting(false);
         }
       })
