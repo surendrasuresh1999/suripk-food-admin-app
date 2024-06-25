@@ -6,6 +6,9 @@ import {
   MenuButton,
   MenuItem,
   MenuItems,
+  Popover,
+  PopoverButton,
+  PopoverPanel,
   Transition,
   TransitionChild,
 } from "@headlessui/react";
@@ -25,7 +28,9 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 const CommonPage = () => {
-  // const userDetails = JSON.parse(localStorage.getItem("foodieUserDetails"));
+  const userDetails = JSON.parse(
+    localStorage.getItem("foodieAdminUserDetails"),
+  );
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const { defaultMode, setDefaultMode } = useContext(Context);
@@ -164,24 +169,15 @@ const CommonPage = () => {
                   <SunIcon className="h-6 w-6" />
                 )}
               </button>
-              <button
-                type="button"
-                className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500 dark:text-white"
-              >
-                <span className="sr-only">View notifications</span>
-                <BellIcon className="h-6 w-6" />
-              </button>
 
               {/* Separator */}
               <div
-                className="hidden dark:bg-white lg:block lg:h-6 lg:w-px lg:bg-gray-400"
+                className="h-6 w-px bg-gray-400 dark:bg-white"
                 aria-hidden="true"
               />
 
-              {/* Profile dropdown */}
-              <Menu as="div" className="relative">
-                <MenuButton className="-m-1.5 flex items-center p-1.5">
-                  <span className="sr-only">Open user menu</span>
+              <Popover>
+                <PopoverButton className="flex w-full items-center gap-1 px-2 py-1 text-sm/6 font-semibold text-orange-400 outline-none">
                   <img
                     className="h-8 w-8 rounded-full bg-gray-50"
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -192,40 +188,39 @@ const CommonPage = () => {
                       className="ml-4 text-sm font-semibold leading-6 text-gray-900 dark:text-white"
                       aria-hidden="true"
                     >
-                      Tom Cook
+                      {userDetails && userDetails.name}
                     </span>
                     <ChevronDownIcon
                       className="ml-2 h-5 w-5 text-gray-400 dark:text-white"
                       aria-hidden="true"
                     />
                   </span>
-                </MenuButton>
+                </PopoverButton>
                 <Transition
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
+                  enter="transition ease-out duration-200"
+                  enterFrom="opacity-0 translate-y-1"
+                  enterTo="opacity-100 translate-y-0"
+                  leave="transition ease-in duration-150"
+                  leaveFrom="opacity-100 translate-y-0"
+                  leaveTo="opacity-0 translate-y-1"
                 >
-                  <MenuItems className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none dark:bg-gray-900">
-                    {userNavigation.map((item) => (
-                      <MenuItem key={item.name}>
-                        {({ focus }) => (
-                          <a
-                            href={item.href}
-                            className={classNames(
-                              "block px-3 py-1 text-sm leading-6 text-gray-900 dark:text-white dark:hover:bg-gray-500",
-                            )}
-                          >
-                            {item.name}
-                          </a>
-                        )}
-                      </MenuItem>
-                    ))}
-                  </MenuItems>
+                  <PopoverPanel
+                    anchor="bottom"
+                    className={`popover-shadow z-[100] -ml-4 w-36 divide-y divide-white/5 rounded-md lg:ml-0 ${defaultMode ? "bg-gray-700 text-white" : "bg-white text-black"} text-sm/6 [--anchor-gap:var(--spacing-5)]`}
+                  >
+                    <div className="flex flex-col justify-start gap-2 py-2">
+                      {userNavigation.map((item, i) => (
+                        <p
+                          key={i}
+                          className={`${defaultMode ? "text-white hover:bg-gray-400" : "text-black hover:bg-indigo-50"} cursor-pointer px-4 py-1`}
+                        >
+                          {item.name}
+                        </p>
+                      ))}
+                    </div>
+                  </PopoverPanel>
                 </Transition>
-              </Menu>
+              </Popover>
             </div>
           </div>
         </div>
@@ -236,9 +231,7 @@ const CommonPage = () => {
           </div>
         </div>
       </div>
-      {/* <button className="group fixed bottom-4 right-2 animate-bounce rounded-full border border-indigo-500 bg-indigo-50 p-2.5 hover:bg-indigo-200">
-        <ChevronUpIcon className="h-6 w-6 text-indigo-400 group-hover:text-indigo-600" />
-      </button> */}
+
       {showScrollToTop && (
         <button
           className="group fixed bottom-4 right-2 animate-bounce rounded-full border border-indigo-500 bg-indigo-50 p-2.5 hover:bg-indigo-200"

@@ -1,11 +1,11 @@
 import {
   CalendarIcon,
   ChartPieIcon,
-  Cog6ToothIcon,
-  DocumentDuplicateIcon,
   FolderIcon,
   HomeIcon,
   UsersIcon,
+  UserPlusIcon,
+  ShoppingBagIcon,
 } from "@heroicons/react/24/outline";
 import { useContext } from "react";
 import { NavLink, useLocation } from "react-router-dom";
@@ -16,19 +16,19 @@ const navigation = [
   {
     name: "Receipes",
     path: "/all-recepies",
-    icon: CalendarIcon,
+    icon: FolderIcon,
     current: false,
   },
-  { name: "Orders", path: "/orders", icon: UsersIcon, current: false },
-  { name: "Services", path: "/services", icon: FolderIcon, current: false },
+  { name: "Orders", path: "/orders", icon: ShoppingBagIcon, current: false },
+  { name: "Services", path: "/services", icon: CalendarIcon, current: false },
   {
     name: "Subscribers",
     path: "/subscribers",
-    icon: DocumentDuplicateIcon,
+    icon: UserPlusIcon,
     current: false,
   },
   { name: "Blogs", path: "/blogs", icon: ChartPieIcon, current: false },
-  { name: "Users", path: "/users", icon: ChartPieIcon, current: false },
+  { name: "Users", path: "/users", icon: UsersIcon, current: false },
 ];
 
 function classNames(...classes) {
@@ -68,18 +68,6 @@ const Sidebar = () => {
               </li>
             ))}
           </ul>
-        </li>
-        <li className="mt-auto">
-          <a
-            href="#"
-            className={`group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold ${defaultMode ? "hover:bg-gray-700" : "hover:bg-indigo-700"} leading-6 text-indigo-200 hover:text-white`}
-          >
-            <Cog6ToothIcon
-              className="h-6 w-6 shrink-0 text-indigo-200 group-hover:text-white"
-              aria-hidden="true"
-            />
-            Settings
-          </a>
         </li>
       </ul>
     </nav>

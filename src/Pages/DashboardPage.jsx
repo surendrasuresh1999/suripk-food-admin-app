@@ -1,59 +1,23 @@
 import {
+  ArrowTrendingUpIcon,
   ShoppingBagIcon,
   ShoppingCartIcon,
   UserCircleIcon,
-  UserIcon,
 } from "@heroicons/react/20/solid";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import numeral from "numeral";
 import React, { useState } from "react";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import {
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-} from "recharts";
 import { Baseurl } from "../BaseUrl";
 import Loader from "../Common/Loader";
+import Tooltip from "@mui/material/Tooltip";
 import ConnectionLost from "../Common/ConnectionLost";
+import {
+  ArrowTrendingDownIcon,
+  QuestionMarkCircleIcon,
+} from "@heroicons/react/16/solid";
+import CommonChart from "../Common/CommonChart";
+import Calender from "../Common/Calender";
 
-const charData = [
-  {
-    name: "Page A",
-    uv: 4000,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-  },
-];
 const cards = [
   {
     title: "Total users",
@@ -84,38 +48,8 @@ const cards = [
   },
 ];
 
-function CustomTooltip({ active, payload, label }) {
-  if (active) {
-    return (
-      <div
-        className={`shadow-white-50 flex flex-col items-start gap-1 rounded-md bg-gray-400 px-4 py-2 shadow-lg`}
-      >
-        {payload.map((payload, index) => (
-          <p key={index} className="text-mediumSize mt-0 text-white">
-            {payload?.name}:{" "}
-            <b className="tracking-wide">
-              {numeral(payload?.value).format("0.a")}
-            </b>
-          </p>
-        ))}
-      </div>
-    );
-  }
-}
-
-function YAxisContentWrapper({ x, y, payload }) {
-  return (
-    <g transform={`translate(${x},${y})`}>
-      <text x={-1} y={0} dy={5} textAnchor="end" fill="#868686">
-        {numeral(payload.value).format("0.a")}
-      </text>
-    </g>
-  );
-}
-
 const DashboardPage = () => {
   const queryClient = useQueryClient();
-  const [selectedDate, setSelectedDate] = useState(null);
 
   const fetchAllBoardData = async () => {
     return await fetch(`${Baseurl.baseurl}/api/dashboard`, {
@@ -160,69 +94,49 @@ const DashboardPage = () => {
                   <span
                     className={`${card.via} rounded-md px-2 py-1 font-semibold tracking-wide`}
                   >
-                    +{data?.data[i]?.percentage}
+                    +{data?.data[i]?.percentage}{" "}
                   </span>
+                  {parseFloat(data?.data[i]?.percentage.replace("%", "")) >=
+                  50 ? (
+                    <ArrowTrendingUpIcon className="h-5 w-5 text-white" />
+                  ) : (
+                    <ArrowTrendingDownIcon className="h-5 w-5 text-white" />
+                  )}
                 </p>
               </li>
             ))}
           </ul>
           <div className="space-y-5 rounded-lg bg-white p-2 shadow dark:bg-gray-900">
             <div className="flex flex-col justify-between sm:flex-row sm:items-center">
-              <h1 className="text-24size font-semibold text-gray-700 dark:text-white">
-                Orders graph
-              </h1>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DatePicker"]}>
-                  <DatePicker
-                    value={selectedDate}
-                    views={["year"]}
-                    onChange={(date) => setSelectedDate(date)}
-                    disableFuture
-                    sx={{ width: "100%", marginTop: "0px" }}
-                    format="YYYY"
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-            </div>
-            <ResponsiveContainer width="100%" height={250}>
-              <LineChart
-                width={600}
-                height={300}
-                data={data.ordersChartData}
-                margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
-              >
-                <Line type="monotone" dataKey="count" stroke="#8884d8" />
-                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+              <h1 className="flex items-center gap-1 text-24size font-semibold text-gray-700 dark:text-white sm:text-28size">
+                Orders graph{" "}
                 <Tooltip
-                  content={<CustomTooltip />}
-                  cursor={{ fill: "transparent" }}
-                />
-                <XAxis dataKey="month" />
-                <YAxis tick={<YAxisContentWrapper />} />
-              </LineChart>
-            </ResponsiveContainer>
+                  title="Graph data is year-wise"
+                  arrow
+                  placement="right-start"
+                >
+                  <QuestionMarkCircleIcon className="mt-1.5 h-5 w-5 text-gray-500" />
+                </Tooltip>
+              </h1>
+              <Calender />
+            </div>
+            <CommonChart graphData={data.ordersChartData} />
           </div>
           <div className="space-y-5 rounded-lg bg-white p-2 shadow dark:bg-gray-900">
-            <h1 className="text-24size font-semibold text-gray-700 dark:text-white">
-              Users graph
-            </h1>
-            <ResponsiveContainer width="100%" height={250}>
-              <LineChart
-                width={600}
-                height={300}
-                data={charData}
-                margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
-              >
-                <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+            <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center sm:gap-0">
+              <h1 className="flex items-center gap-1 text-24size font-semibold text-gray-700 dark:text-white sm:text-28size">
+                Users graph{" "}
                 <Tooltip
-                  content={<CustomTooltip />}
-                  cursor={{ fill: "transparent" }}
-                />
-                <XAxis dataKey="name" />
-                <YAxis tick={<YAxisContentWrapper />} />
-              </LineChart>
-            </ResponsiveContainer>
+                  arrow
+                  title="Graph data is year-wise"
+                  placement="right-start"
+                >
+                  <QuestionMarkCircleIcon className="mt-1.5 h-5 w-5 text-gray-500" />
+                </Tooltip>
+              </h1>
+              <Calender />
+            </div>
+            <CommonChart graphData={data.usersChartData} />
           </div>
         </>
       )}
