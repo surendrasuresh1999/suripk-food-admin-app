@@ -13,3 +13,8 @@ export const blogSchema = yup.object().shape({
   title: yup.string().required("Title is required"),
   discription: yup.string().required("Description is required"),
 });
+
+export const userLoginSchema = yup.object().shape({
+  email: yup.string().email("Invalid email").required("Email is required"),
+  password: yup.string().required("Password is required"),
+});

@@ -21,6 +21,7 @@
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",
     "formik": "^2.4.6",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.395.0",
     "numeral": "^2.0.6",
     "prettier-plugin-tailwindcss": "^0.6.5",

@@ -167,7 +167,7 @@ const DashboardPage = () => {
             ))}
           </ul>
           <div className="space-y-5 rounded-lg bg-white p-2 shadow dark:bg-gray-900">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col justify-between sm:flex-row sm:items-center">
               <h1 className="text-24size font-semibold text-gray-700 dark:text-white">
                 Orders graph
               </h1>

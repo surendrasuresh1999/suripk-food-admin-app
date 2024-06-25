@@ -10,10 +10,12 @@ import SubscribersPage from "./Pages/SubscribersPage";
 import DashboardPage from "./Pages/DashboardPage";
 import BlogDetailsPage from "./Pages/BlogDetailsPage";
 import UsersPage from "./Pages/UsersPage";
+import Login from "./Pages/Login";
 
 const App = () => {
   return (
     <Routes>
+      <Route path="/login" element={<Login />} />
       <Route path="/" element={<CommonPage />}>
         <Route index element={<DashboardPage />} />
         <Route path="/all-recepies" element={<FoodItemsPage />} />
