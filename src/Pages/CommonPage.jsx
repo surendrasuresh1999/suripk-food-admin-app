@@ -115,7 +115,7 @@ const CommonPage = () => {
                   <div className="flex h-16 shrink-0 items-center">
                     <img
                       className="h-8 w-auto"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=white"
+                      src={`https://tailwindui.com/img/logos/mark.svg?${defaultMode ? "color=indigo&shade=500" : "color=white"}`}
                       alt="Your Company"
                     />
                   </div>
@@ -163,7 +163,7 @@ const CommonPage = () => {
                 className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500 dark:text-white"
               >
                 <span className="sr-only">View notifications</span>
-                {defaultMode ? (
+                {!defaultMode ? (
                   <MoonIcon className="h-6 w-6" />
                 ) : (
                   <SunIcon className="h-6 w-6" />
