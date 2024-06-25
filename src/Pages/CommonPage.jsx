@@ -25,6 +25,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 const CommonPage = () => {
+  // const userDetails = JSON.parse(localStorage.getItem("foodieUserDetails"));
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const { defaultMode, setDefaultMode } = useContext(Context);

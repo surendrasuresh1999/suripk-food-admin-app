@@ -1,46 +1,15 @@
-import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import React from "react";
 import { Baseurl } from "../BaseUrl";
 import Loader from "../Common/Loader";
 import ConnectionLost from "../Common/ConnectionLost";
 import NodataFound from "../Common/NodataFound";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-const projects = [
-  {
-    name: "Graph API",
-    initials: "GA",
-    href: "#",
-    members: 16,
-    bgColor: "bg-pink-600",
-  },
-  {
-    name: "Component Design",
-    initials: "CD",
-    href: "#",
-    members: 12,
-    bgColor: "bg-purple-600",
-  },
-  {
-    name: "Templates",
-    initials: "T",
-    href: "#",
-    members: 16,
-    bgColor: "bg-yellow-500",
-  },
-  {
-    name: "React Components",
-    initials: "RC",
-    href: "#",
-    members: 8,
-    bgColor: "bg-green-500",
-  },
-];
-
-const SubscribersPage = () => {
+const UsersPage = () => {
   const queryClient = useQueryClient();
 
   const fetchAllSubscribers = async () => {
-    return await fetch(`${Baseurl.baseurl}/api/subscribe`, {
+    return await fetch(`${Baseurl.baseurl}/api/user/all`, {
       headers: {
         Authorization: `Bearer ${Baseurl.token}`,
       },
@@ -52,7 +21,7 @@ const SubscribersPage = () => {
     queryFn: fetchAllSubscribers,
   });
 
-  const renderServiceCard = (project, i) => {
+  const renderServiceCard = (user, i) => {
     return (
       <li key={i} className="col-span-1 flex-1 rounded-md shadow-sm">
         <div className="flex items-center gap-2 overflow-hidden truncate rounded-md border border-gray-200 bg-white p-2 dark:bg-gray-800">
@@ -67,10 +36,10 @@ const SubscribersPage = () => {
           </span>
           <div className="truncate">
             <p className="block font-medium text-gray-900 dark:text-white">
-              {project.name.charAt(0).toUpperCase() + project.name.slice(1)}
+              {user.name.charAt(0).toUpperCase() + user.name.slice(1)}
             </p>
             <p className="block truncate text-gray-500 dark:text-white">
-              {project.email}
+              {user.email}
             </p>
           </div>
         </div>
@@ -81,28 +50,28 @@ const SubscribersPage = () => {
   return (
     <div className="space-y-6">
       <h1 className="text-26size font-bold tracking-wide text-gray-700 dark:text-white sm:text-32size">
-        All Subscribers
+        All Users
       </h1>
       <div>
         {isPending ? (
           <Loader />
         ) : error ? (
           <ConnectionLost />
-        ) : data.subscribers?.length > 0 ? (
+        ) : data.users?.length > 0 ? (
           <ul
             role="list"
             className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
           >
-            {data.subscribers?.map((project, i) =>
-              renderServiceCard(project, i),
-            )}
+            {data.users?.map((project, i) => renderServiceCard(project, i))}
           </ul>
         ) : (
-          <NodataFound subTitle={"There is no subscribers are found"} />
+          <NodataFound
+            subTitle={"There is no users are found at this moment!"}
+          />
         )}
       </div>
     </div>
   );
 };
 
-export default SubscribersPage;
+export default UsersPage;

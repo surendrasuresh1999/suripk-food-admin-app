@@ -28,6 +28,7 @@ const navigation = [
     current: false,
   },
   { name: "Blogs", path: "/blogs", icon: ChartPieIcon, current: false },
+  { name: "Users", path: "/users", icon: ChartPieIcon, current: false },
 ];
 
 function classNames(...classes) {

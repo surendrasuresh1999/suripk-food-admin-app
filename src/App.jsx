@@ -9,6 +9,7 @@ import PageNotFound from "./Pages/PageNotFound";
 import SubscribersPage from "./Pages/SubscribersPage";
 import DashboardPage from "./Pages/DashboardPage";
 import BlogDetailsPage from "./Pages/BlogDetailsPage";
+import UsersPage from "./Pages/UsersPage";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/blogs" element={<BlogsPage />} />
         <Route path="/blogs/:id" element={<BlogDetailsPage />} />
         <Route path="/subscribers" element={<SubscribersPage />} />
+        <Route path="/users" element={<UsersPage />} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>
