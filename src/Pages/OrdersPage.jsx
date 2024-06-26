@@ -25,6 +25,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import NodataFound from "../Common/NodataFound";
 import Context from "../Context/Context";
+import { BuildingOffice2Icon } from "@heroicons/react/24/solid";
+import { PhoneIcon, UserIcon } from "@heroicons/react/20/solid";
 
 const tableHeadCells = [
   "Images",
@@ -99,12 +101,77 @@ const OrdersPage = () => {
       });
   };
 
-  const renderStatusUpdateMenu = (orderId) => {
+  const renderStatusMenu = (orderId) => {
+    return (
+      <div className="flex flex-col justify-start gap-2 py-2">
+        {orderStatus.map((button, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => {
+              handleChangeOrderStatus(button, orderId);
+            }}
+            className={`px-6 py-1 text-start text-14size font-semibold tracking-wide ${defaultMode ? "text-white hover:bg-gray-700" : "text-slate-600 hover:bg-gray-200"} `}
+          >
+            {button}
+          </button>
+        ))}
+      </div>
+    );
+  };
+
+  const renderAddressCard = (address) => {
+    return (
+      <div className="mx-auto max-w-64">
+        <div className="p-4">
+          <div className="text-sm font-semibold uppercase tracking-wide text-indigo-500">
+            Address Type: {address.addressType}
+          </div>
+          <div className="mt-2">
+            <p className="flex items-start gap-2 text-gray-600">
+              <BuildingOffice2Icon
+                className={`h-8 w-8 ${defaultMode ? "text-white" : "text-gray-500"}`}
+              />
+              <span
+                className={`text-16size font-medium tracking-wide ${defaultMode ? "text-white" : "text-gray-700"}`}
+              >
+                {address.areaSector}
+              </span>
+            </p>
+          </div>
+          <div className="mt-4">
+            <div className="flex items-center gap-2">
+              <UserIcon
+                className={`h-6 w-6 ${defaultMode ? "text-white" : "text-gray-500"}`}
+              />
+              <span
+                className={`text-16size font-medium tracking-wide ${defaultMode ? "text-white" : "text-gray-700"}`}
+              >
+                {address.receiversName}
+              </span>
+            </div>
+            <div className="mt-2 flex items-start gap-2">
+              <PhoneIcon
+                className={`h-5 w-5 ${defaultMode ? "text-white" : "text-gray-500"}`}
+              />
+              <span
+                className={`text-16size font-medium tracking-wide ${defaultMode ? "text-white" : "text-gray-700"}`}
+              >
+                {address.receiversContact}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderStatusUpdateMenu = (action, data) => {
     return (
       <div className="flex justify-center">
         <Popover>
           <PopoverButton className="w-full rounded-md border border-orange-600 px-2 py-1 text-sm/6 font-semibold text-orange-400 outline-none">
-            Update
+            {action === "status" ? "Update" : "See address"}
           </PopoverButton>
           <Transition
             enter="transition ease-out duration-200"
@@ -118,20 +185,9 @@ const OrdersPage = () => {
               anchor="bottom"
               className={`popover-shadow divide-y divide-white/5 rounded-md ${defaultMode ? "bg-gray-900 text-white" : "bg-white text-black"} text-sm/6 [--anchor-gap:var(--spacing-5)]`}
             >
-              <div className="flex flex-col justify-start gap-2 py-2">
-                {orderStatus.map((button, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => {
-                      handleChangeOrderStatus(button, orderId);
-                    }}
-                    className={`px-6 py-1 text-start text-14size font-semibold tracking-wide ${defaultMode ? "text-white hover:bg-gray-700" : "text-slate-600 hover:bg-gray-200"} `}
-                  >
-                    {button}
-                  </button>
-                ))}
-              </div>
+              {action === "status"
+                ? renderStatusMenu(data)
+                : renderAddressCard(data)}
             </PopoverPanel>
           </Transition>
         </Popover>
@@ -191,9 +247,7 @@ const OrdersPage = () => {
                       </span>
                     </TableCell>
                     <TableCell align="left">
-                      <button className="break words block max-w-20 text-black dark:text-white sm:max-w-60">
-                        Delivery Address
-                      </button>
+                      {renderStatusUpdateMenu("address", row.deliveryAddress)}
                     </TableCell>
 
                     <TableCell align="center">
@@ -204,7 +258,7 @@ const OrdersPage = () => {
                       </span>
                     </TableCell>
                     <TableCell align="center">
-                      {renderStatusUpdateMenu(row._id)}
+                      {renderStatusUpdateMenu("status", row._id)}
                     </TableCell>
                   </TableRow>
                 ))}

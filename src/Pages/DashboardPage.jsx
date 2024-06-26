@@ -6,7 +6,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import numeral from "numeral";
-import React, { useState } from "react";
+import React from "react";
 import { Baseurl } from "../BaseUrl";
 import Loader from "../Common/Loader";
 import Tooltip from "@mui/material/Tooltip";
@@ -45,6 +45,17 @@ const cards = [
     from: "bg-[#2069CD]",
     via: "bg-[#367FD5]",
     lable: "items",
+  },
+];
+
+const graphCard = [
+  {
+    title: "Orders graph",
+    tooltipText: "Orders graph is current year-wise only",
+  },
+  {
+    title: "Users graph",
+    tooltipText: "Users graph is current year-wise only",
   },
 ];
 
@@ -106,38 +117,36 @@ const DashboardPage = () => {
               </li>
             ))}
           </ul>
-          <div className="space-y-5 rounded-lg bg-white p-2 shadow dark:bg-gray-900">
-            <div className="flex flex-col justify-between sm:flex-row sm:items-center">
-              <h1 className="flex items-center gap-1 text-24size font-semibold text-gray-700 dark:text-white sm:text-28size">
-                Orders graph{" "}
-                <Tooltip
-                  title="Graph data is year-wise"
-                  arrow
-                  placement="right-start"
-                >
-                  <QuestionMarkCircleIcon className="mt-1.5 h-5 w-5 text-gray-500" />
-                </Tooltip>
-              </h1>
-              <Calender />
+          {graphCard.map((graph, index) => (
+            <div
+              key={index}
+              className="space-y-5 rounded-lg bg-white p-2 shadow dark:bg-gray-900"
+            >
+              <div className="flex flex-col justify-between sm:flex-row sm:items-center">
+                <h1 className="flex items-center gap-1 text-24size font-semibold text-gray-700 dark:text-white sm:text-28size">
+                  {graph.title}{" "}
+                  <Tooltip
+                    title={graph.tooltipText}
+                    arrow
+                    placement="right-start"
+                  >
+                    <QuestionMarkCircleIcon className="mt-1.5 h-5 w-5 text-gray-500" />
+                  </Tooltip>
+                </h1>
+                <Calender
+                  viewsArr={["year"]}
+                  disablePast={false}
+                  disableFuture={true}
+                  format="YYYY"
+                />
+              </div>
+              <CommonChart
+                graphData={
+                  index === 0 ? data.ordersChartData : data.usersChartData
+                }
+              />
             </div>
-            <CommonChart graphData={data.ordersChartData} />
-          </div>
-          <div className="space-y-5 rounded-lg bg-white p-2 shadow dark:bg-gray-900">
-            <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center sm:gap-0">
-              <h1 className="flex items-center gap-1 text-24size font-semibold text-gray-700 dark:text-white sm:text-28size">
-                Users graph{" "}
-                <Tooltip
-                  arrow
-                  title="Graph data is year-wise"
-                  placement="right-start"
-                >
-                  <QuestionMarkCircleIcon className="mt-1.5 h-5 w-5 text-gray-500" />
-                </Tooltip>
-              </h1>
-              <Calender />
-            </div>
-            <CommonChart graphData={data.usersChartData} />
-          </div>
+          ))}
         </>
       )}
     </div>

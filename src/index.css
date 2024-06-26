@@ -10,7 +10,15 @@
     padding: 11.5px 14px !important;
 }
 
-.recharts-responsive-container > div > svg{
+.recharts-responsive-container>div>svg {
     position: relative;
     left: -20px;
 }
+
+/* .MuiPaper-root {
+    background-color: #eaea87 !important;
+    color: #fff !important;
+}
+.css-innj4t-MuiPickersYear-yearButton{
+    color: #fff !important;
+} */

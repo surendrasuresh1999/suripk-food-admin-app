@@ -24,9 +24,6 @@ const userNavigation = [
   { name: "Sign out", href: "#" },
 ];
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 const CommonPage = () => {
   const userDetails = JSON.parse(
     localStorage.getItem("foodieAdminUserDetails"),
@@ -37,7 +34,6 @@ const CommonPage = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      console.log("sadfasdf", window.scrollY);
       if (window.scrollY > 200) {
         setShowScrollToTop(true);
       } else {

@@ -5,6 +5,7 @@ import Loader from "../Common/Loader";
 import ConnectionLost from "../Common/ConnectionLost";
 import ServiceCard from "../Components/ServiceCard";
 import NodataFound from "../Common/NodataFound";
+import Calender from "../Common/Calender";
 
 const ServicesPage = () => {
   const queryClient = useQueryClient();
@@ -28,6 +29,7 @@ const ServicesPage = () => {
         <h1 className="text-26size font-bold tracking-wide text-gray-700 dark:text-white sm:text-32size">
           All Services
         </h1>
+        <Calender viewsArr={["year", "month", "day"]} disablePast={false} disableFuture={false} format="DD/MM/YYYY" />
       </div>
       <div>
         {isPending ? (
