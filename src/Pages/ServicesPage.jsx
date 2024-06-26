@@ -1,14 +1,15 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import React, { useState } from "react";
 import { Baseurl } from "../BaseUrl";
 import Loader from "../Common/Loader";
 import ConnectionLost from "../Common/ConnectionLost";
 import ServiceCard from "../Components/ServiceCard";
 import NodataFound from "../Common/NodataFound";
 import Calender from "../Common/Calender";
+import dayjs from "dayjs";
 
 const ServicesPage = () => {
-  const queryClient = useQueryClient();
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const fetchingServices = async () => {
     return await fetch(`${Baseurl.baseurl}/api/service`, {
@@ -22,31 +23,60 @@ const ServicesPage = () => {
     queryKey: ["servicesData"],
     queryFn: fetchingServices,
   });
-  console.log(data);
+
+  const hanldeCatchDate = (date) => {
+    if (date === "Invalid Date") {
+      setSelectedDate(null);
+    } else {
+      setSelectedDate(date);
+    }
+  };
+
+  const filteredServices =
+    selectedDate !== null
+      ? data?.services.filter((service) => {
+          const eventDate = dayjs(service.eventDate, "DD/MM/YYYY");
+          return eventDate.isSame(dayjs(selectedDate, "DD/MM/YYYY"), "day"); // Compare dates by day
+        })
+      : data?.services;
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
         <h1 className="text-26size font-bold tracking-wide text-gray-700 dark:text-white sm:text-32size">
           All Services
         </h1>
-        <Calender viewsArr={["year", "month", "day"]} disablePast={false} disableFuture={false} format="DD/MM/YYYY" />
+        <Calender
+          viewsArr={["year", "month", "day"]}
+          disablePast={false}
+          disableFuture={false}
+          format="DD/MM/YYYY"
+          hanlder={hanldeCatchDate}
+          setterFun={setSelectedDate}
+        />
       </div>
       <div>
         {isPending ? (
           <Loader />
         ) : error ? (
           <ConnectionLost />
-        ) : data.services.length > 0 ? (
+        ) : filteredServices.length > 0 ? (
           <ul
             role="list"
             className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
           >
-            {data.services?.map((service, index) => (
+            {filteredServices?.map((service, index) => (
               <ServiceCard data={service} key={index} />
             ))}
           </ul>
         ) : (
-          <NodataFound subTitle={"There is no Services data found"} />
+          <NodataFound
+            subTitle={
+              selectedDate === null
+                ? "There is no Services data found"
+                : "No services found based on date"
+            }
+          />
         )}
       </div>
     </div>

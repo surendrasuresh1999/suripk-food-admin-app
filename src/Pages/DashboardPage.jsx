@@ -6,7 +6,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import numeral from "numeral";
-import React from "react";
+import React, { useState } from "react";
 import { Baseurl } from "../BaseUrl";
 import Loader from "../Common/Loader";
 import Tooltip from "@mui/material/Tooltip";
@@ -61,6 +61,7 @@ const graphCard = [
 
 const DashboardPage = () => {
   const queryClient = useQueryClient();
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const fetchAllBoardData = async () => {
     return await fetch(`${Baseurl.baseurl}/api/dashboard`, {
@@ -138,6 +139,8 @@ const DashboardPage = () => {
                   disablePast={false}
                   disableFuture={true}
                   format="YYYY"
+                  hanlder={() => {}}
+                  setterFun={setSelectedDate}
                 />
               </div>
               <CommonChart
