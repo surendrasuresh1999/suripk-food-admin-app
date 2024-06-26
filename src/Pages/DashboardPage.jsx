@@ -61,8 +61,8 @@ const graphCard = [
 
 const DashboardPage = () => {
   const queryClient = useQueryClient();
-  const [selectedDate, setSelectedDate] = useState(null);
-
+  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedRelation, setSelectedRelation] = useState("");
   const fetchAllBoardData = async () => {
     return await fetch(`${Baseurl.baseurl}/api/dashboard`, {
       headers: {
@@ -75,6 +75,24 @@ const DashboardPage = () => {
     queryKey: ["boardData"],
     queryFn: fetchAllBoardData,
   });
+  const hanldeCatchDate = (date) => {
+    // console.log("asdfasdfadsf", date.split(" ")[0]);
+    setSelectedRelation(date.split(" ")[0]);
+    if (date === "Invalid Date") {
+      setSelectedYear(null);
+    } else {
+      setSelectedYear(date.split(" ")[1]);
+    }
+  };
+
+  // const filteredData =
+  //   selectedDate !== null
+  //     ? data?.services.filter((service) => {
+  //         const eventDate = dayjs(service.eventDate, "DD/MM/YYYY");
+  //         return eventDate.isSame(dayjs(selectedDate, "DD/MM/YYYY"), "day"); // Compare dates by day
+  //       })
+  //     : data?.services;
+
   return (
     <div className="space-y-6">
       {isPending ? (
@@ -139,8 +157,9 @@ const DashboardPage = () => {
                   disablePast={false}
                   disableFuture={true}
                   format="YYYY"
-                  hanlder={() => {}}
-                  setterFun={setSelectedDate}
+                  hanlder={hanldeCatchDate}
+                  setterFun={setSelectedYear}
+                  relation={index === 0 ? "orders" : "users"}
                 />
               </div>
               <CommonChart

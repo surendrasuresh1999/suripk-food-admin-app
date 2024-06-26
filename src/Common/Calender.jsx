@@ -14,6 +14,7 @@ const Calender = ({
   format,
   hanlder,
   setterFun,
+  relation,
 }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const { defaultMode } = useContext(Context);
@@ -30,9 +31,17 @@ const Calender = ({
           <DatePicker
             value={selectedDate}
             views={viewsArr}
+            disableFuture={disableFuture}
+            disablePast={disablePast}
+            sx={{ width: "100%", marginTop: "0px" }}
+            format={format}
             onChange={(date) => {
               setSelectedDate(date);
-              hanlder(dayjs(date).format("DD/MM/YYYY"));
+              hanlder(
+                format === "YYYY"
+                  ? `${relation === "orders" ? "orders " : "users "}${dayjs(date).format("YYYY")}`
+                  : dayjs(date).format("DD/MM/YYYY"),
+              );
             }}
             slotProps={{
               field: {
@@ -43,10 +52,6 @@ const Calender = ({
                 },
               },
             }}
-            disableFuture={disableFuture}
-            disablePast={disablePast}
-            sx={{ width: "100%", marginTop: "0px" }}
-            format={format}
           />
         </DemoContainer>
       </LocalizationProvider>
