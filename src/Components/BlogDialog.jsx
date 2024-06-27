@@ -35,6 +35,7 @@ const BlogDialog = ({ open, setter, handler }) => {
       setFoodImageurl(editableObj?.imageUrl);
     }
   }, [open]);
+
   return (
     <Dialog
       open={open}
@@ -76,7 +77,7 @@ const BlogDialog = ({ open, setter, handler }) => {
                     <Field
                       type={"text"}
                       name={key}
-                      className={`grow rounded-md border border-gray-400 ${defaultMode ? "bg-gray-500" : "bg-white"} p-1.5 text-white outline-none`}
+                      className={`grow rounded-md border border-gray-400 ${defaultMode ? "bg-gray-500 text-white" : "bg-white text-black"} p-1.5 outline-none`}
                     />
                   ) : (
                     <Field
@@ -85,7 +86,7 @@ const BlogDialog = ({ open, setter, handler }) => {
                       rows={3}
                       cols={4}
                       style={{ resize: "none" }}
-                      className={`grow rounded-md border border-gray-400 text-white ${defaultMode ? "bg-gray-500" : "bg-white"} p-1.5 outline-none`}
+                      className={`grow rounded-md border border-gray-400 ${defaultMode ? "bg-gray-500 text-white" : "bg-white text-black"} p-1.5 outline-none`}
                     />
                   )}
 

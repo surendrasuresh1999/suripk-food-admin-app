@@ -19,7 +19,6 @@ import swal from "sweetalert";
 import axios from "axios";
 import toast from "react-hot-toast";
 import NodataFound from "../Common/NodataFound";
-import { editableDataObj } from "../Store";
 import Context from "../Context/Context";
 
 const tableHeadCells = [
@@ -36,7 +35,7 @@ const FoodItemsPage = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const queryClient = useQueryClient();
-  const { defaultMode } = useContext(Context);
+  const { defaultMode, setEditableObj, editableObj } = useContext(Context);
 
   const fetchFoodItems = async () => {
     return await fetch(`${Baseurl.baseurl}/api/food`, {
@@ -67,7 +66,7 @@ const FoodItemsPage = () => {
   const handleCreateFood = (foddData, actions, actionType) => {
     const httpMethod = actionType === "new" ? "POST" : "PUT";
     const urlString =
-      actionType === "new" ? "food" : `food/${editableDataObj?.data?._id}`;
+      actionType === "new" ? "food" : `food/${editableObj?._id}`;
 
     axios({
       method: httpMethod,
@@ -83,7 +82,7 @@ const FoodItemsPage = () => {
           queryClient.invalidateQueries("foodItemsData");
           setOpenAddFoodDialog(false);
           actions.resetForm();
-          editableDataObj.data = {};
+          setEditableObj({});
         } else {
           toast.error(res.data.message);
         }
@@ -209,7 +208,7 @@ const FoodItemsPage = () => {
                           <button
                             onClick={() => {
                               setOpenAddFoodDialog(true);
-                              editableDataObj.data = row;
+                              setEditableObj(row);
                             }}
                           >
                             <PencilSquareIcon className="h-5 w-5 text-green-500" />

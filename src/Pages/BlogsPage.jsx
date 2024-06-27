@@ -1,5 +1,5 @@
 import { PlusCircleIcon } from "@heroicons/react/20/solid";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import BlogDialog from "../Components/BlogDialog";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Baseurl } from "../BaseUrl";
@@ -9,11 +9,12 @@ import Loader from "../Common/Loader";
 import axios from "axios";
 import toast from "react-hot-toast";
 import NodataFound from "../Common/NodataFound";
-import { editableDataObj } from "../Store";
+import Context from "../Context/Context";
 
 const BlogsPage = () => {
   const [openBlogDialog, setOpenBlogDialog] = useState(false);
   const queryClient = useQueryClient();
+  const { editableObj, setEditableObj } = useContext(Context);
 
   const fetchingBlogs = async () => {
     return await fetch(`${Baseurl.baseurl}/api/blog`, {
@@ -31,7 +32,7 @@ const BlogsPage = () => {
   const handleCreateBlog = (blogData, actions, action) => {
     const httpMethod = action === "new" ? "POST" : "PUT";
     const urlString =
-      action === "new" ? "blog" : `blog/update/${editableDataObj?.data?._id}`;
+      action === "new" ? "blog" : `blog/update/${editableObj?._id}`;
     axios({
       method: httpMethod,
       url: `${Baseurl.baseurl}/api/${urlString}`,
@@ -46,7 +47,7 @@ const BlogsPage = () => {
           toast.success(res.data.message);
           setOpenBlogDialog(false);
           actions.setSubmitting(false);
-          editableDataObj.data = {}
+          setEditableObj({});
         } else {
           toast.error(res.data.message);
         }

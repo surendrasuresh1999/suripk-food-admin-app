@@ -83,13 +83,13 @@ const AddFoodDialog = ({ openDialog, setterFun, handler }) => {
                       rows={2}
                       cols={4}
                       style={{ resize: "none" }}
-                      className={`grow rounded-md border border-gray-400 text-white ${defaultMode ? "bg-gray-500" : "bg-white"} p-1.5 outline-none`}
+                      className={`grow rounded-md border border-gray-400 ${defaultMode ? "bg-gray-500 text-white" : "bg-white text-black"} p-1.5 outline-none`}
                     />
                   ) : (
                     <Field
                       type={key === "price" ? key : "text"}
                       name={key}
-                      className={`grow rounded-md border border-gray-400 ${defaultMode ? "bg-gray-500" : "bg-white"} p-1.5 text-white outline-none`}
+                      className={`grow rounded-md border border-gray-400 ${defaultMode ? "bg-gray-500 text-white" : "bg-white text-black"} p-1.5 outline-none`}
                     />
                   )}
                   <ErrorMessage

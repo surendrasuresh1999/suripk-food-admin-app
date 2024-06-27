@@ -1,15 +1,16 @@
 import { PencilSquareIcon } from "@heroicons/react/16/solid";
 import { HeartIcon } from "@heroicons/react/20/solid";
 import numeral from "numeral";
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { editableDataObj } from "../Store";
+import Context from "../Context/Context";
 
 const BlogCard = ({ person, setter }) => {
+  const { setEditableObj } = useContext(Context);
   return (
     <li
       key={person.email}
-      className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white dark:bg-gray-800 shadow"
+      className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow dark:bg-gray-800"
     >
       <div className="p-4">
         <div className="h-56">
@@ -31,7 +32,9 @@ const BlogCard = ({ person, setter }) => {
               </span>
             )}
           </div>
-          <p className="truncate text-sm text-gray-500 dark:text-white">{person.discription}</p>
+          <p className="truncate text-sm text-gray-500 dark:text-white">
+            {person.discription}
+          </p>
           <div className="flex items-center justify-between">
             <Link
               to={`/blogs/${person._id}`}
@@ -42,7 +45,7 @@ const BlogCard = ({ person, setter }) => {
             <button
               onClick={() => {
                 setter(true);
-                editableDataObj.data = person;
+                setEditableObj(person);
               }}
               className="rounded-md border bg-green-50 p-2"
             >
