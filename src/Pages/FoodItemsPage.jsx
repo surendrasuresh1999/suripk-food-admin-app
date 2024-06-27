@@ -20,6 +20,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import NodataFound from "../Common/NodataFound";
 import { editableDataObj } from "../Store";
+import Context from "../Context/Context";
 
 const tableHeadCells = [
   "Image",
@@ -35,6 +36,7 @@ const FoodItemsPage = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const queryClient = useQueryClient();
+  const { defaultMode } = useContext(Context);
 
   const fetchFoodItems = async () => {
     return await fetch(`${Baseurl.baseurl}/api/food`, {
@@ -98,6 +100,7 @@ const FoodItemsPage = () => {
       icon: "warning",
       buttons: true,
       dangerMode: true,
+      className: `${defaultMode ? "dark-swal" : "white-swal"}`,
     }).then((willDelete) => {
       if (willDelete) {
         axios
@@ -124,11 +127,6 @@ const FoodItemsPage = () => {
             });
             console.error("Error:", error);
           });
-      } else {
-        swal({
-          text: "Your food item is Safe!",
-          icon: "info",
-        });
       }
     });
   };

@@ -15,9 +15,10 @@ import {
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, MoonIcon, SunIcon } from "@heroicons/react/20/solid";
 import Sidebar from "../Common/Sidebar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { ChevronUpIcon } from "@heroicons/react/20/solid";
 import Context from "../Context/Context";
+import swal from "sweetalert";
 
 const userNavigation = [
   { name: "Your profile", href: "#" },
@@ -31,6 +32,7 @@ const CommonPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const { defaultMode, setDefaultMode } = useContext(Context);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -53,6 +55,24 @@ const CommonPage = () => {
       top: 0,
       behavior: "smooth",
     });
+  };
+
+  const handleMenuItemClick = (index) => {
+    if (index === 1) {
+      swal({
+        title: "Logout Confirmation",
+        text: "Are you sure? This action cannot be undone.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+        className: `${defaultMode ? "dark-swal" : "white-swal"}`,
+      }).then((willDelete) => {
+        if (willDelete) {
+          localStorage.removeItem("foodieAdminUserDetails");
+          navigate("/login");
+        }
+      });
+    }
   };
 
   return (
@@ -206,12 +226,13 @@ const CommonPage = () => {
                   >
                     <div className="flex flex-col justify-start gap-2 py-2">
                       {userNavigation.map((item, i) => (
-                        <p
+                        <button
+                          onClick={() => handleMenuItemClick(i)}
                           key={i}
-                          className={`${defaultMode ? "text-white hover:bg-gray-400" : "text-black hover:bg-indigo-50"} cursor-pointer px-4 py-1`}
+                          className={`${defaultMode ? "text-white hover:bg-gray-400" : "text-black hover:bg-indigo-50"} px-4 py-1 text-start`}
                         >
                           {item.name}
-                        </p>
+                        </button>
                       ))}
                     </div>
                   </PopoverPanel>

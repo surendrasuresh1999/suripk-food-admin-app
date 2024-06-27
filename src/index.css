@@ -18,3 +18,13 @@
     position: relative;
     left: -20px;
 }
+
+.dark-swal {
+    background-color: #6b7280;
+    color: white;
+}
+
+.white-swal {
+    background-color: #fff;
+    color: #000;
+}
