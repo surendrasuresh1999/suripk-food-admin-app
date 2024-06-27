@@ -19,6 +19,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { ChevronUpIcon } from "@heroicons/react/20/solid";
 import Context from "../Context/Context";
 import swal from "sweetalert";
+import Cookies from "js-cookie";
 
 const userNavigation = [
   { name: "Your profile", href: "#" },
@@ -70,6 +71,7 @@ const CommonPage = () => {
         if (willDelete) {
           localStorage.removeItem("foodieAdminUserDetails");
           navigate("/login");
+          Cookies.remove("adminJwtToken");
         }
       });
     }
