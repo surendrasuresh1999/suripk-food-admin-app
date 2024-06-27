@@ -12,7 +12,7 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, MoonIcon, SunIcon } from "@heroicons/react/20/solid";
 import Sidebar from "../Common/Sidebar";
 import { Outlet } from "react-router-dom";

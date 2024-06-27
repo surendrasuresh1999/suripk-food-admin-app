@@ -5,37 +5,6 @@ import Loader from "../Common/Loader";
 import ConnectionLost from "../Common/ConnectionLost";
 import NodataFound from "../Common/NodataFound";
 
-const projects = [
-  {
-    name: "Graph API",
-    initials: "GA",
-    href: "#",
-    members: 16,
-    bgColor: "bg-pink-600",
-  },
-  {
-    name: "Component Design",
-    initials: "CD",
-    href: "#",
-    members: 12,
-    bgColor: "bg-purple-600",
-  },
-  {
-    name: "Templates",
-    initials: "T",
-    href: "#",
-    members: 16,
-    bgColor: "bg-yellow-500",
-  },
-  {
-    name: "React Components",
-    initials: "RC",
-    href: "#",
-    members: 8,
-    bgColor: "bg-green-500",
-  },
-];
-
 const SubscribersPage = () => {
   const queryClient = useQueryClient();
 
@@ -55,7 +24,7 @@ const SubscribersPage = () => {
   const renderServiceCard = (project, i) => {
     return (
       <li key={i} className="col-span-1 flex-1 rounded-md shadow-sm">
-        <div className="flex items-center gap-2 overflow-hidden truncate rounded-md border border-gray-200 bg-white p-2 dark:bg-gray-800">
+        <div className="flex items-start gap-2 overflow-hidden truncate rounded-md border border-gray-200 bg-white p-2 dark:bg-gray-800">
           <span className="inline-block h-12 w-12 shrink-0 overflow-hidden rounded-full">
             <svg
               className="h-full w-full text-gray-300"
@@ -71,6 +40,9 @@ const SubscribersPage = () => {
             </p>
             <p className="block truncate text-gray-500 dark:text-white">
               {project.email}
+            </p>
+            <p className="mt-1 block w-max truncate rounded-md bg-green-200 px-2 py-1 text-green-500 dark:text-white">
+              {project.status}
             </p>
           </div>
         </div>

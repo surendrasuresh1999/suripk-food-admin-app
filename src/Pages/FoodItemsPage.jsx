@@ -197,7 +197,7 @@ const FoodItemsPage = () => {
                       </TableCell>
                       <TableCell align="left">
                         <span className="flex items-center justify-center gap-1 font-semibold text-black dark:text-white">
-                          4🌟
+                          {row.rating || 0}🌟
                         </span>
                       </TableCell>
                       <TableCell align="left">
