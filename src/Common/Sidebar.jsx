@@ -49,8 +49,8 @@ const Sidebar = () => {
                   to={item.path}
                   className={classNames(
                     item.path === loaction.pathname
-                      ? ` ${defaultMode ? "bg-gray-700" : "bg-indigo-700"} text-white`
-                      : `text-indigo-200 ${defaultMode ? "hover:bg-gray-700" : "hover:bg-indigo-700"} hover:text-white dark:hover:bg-gray-700`,
+                      ? ` ${defaultMode ? "bg-gray-700 text-white" : "bg-gray-500 text-white"}`
+                      : ` ${defaultMode ? "text-white hover:bg-gray-700 hover:text-white" : "text-gray-700 hover:bg-gray-500 hover:text-white"}`,
                     "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6",
                   )}
                 >
@@ -58,7 +58,7 @@ const Sidebar = () => {
                     className={classNames(
                       item.path === loaction.pathname
                         ? "text-white"
-                        : "text-indigo-200 group-hover:text-white",
+                        : ` ${defaultMode ? "text-white hover:bg-gray-700 hover:text-white" : "text-gray-700 hover:bg-gray-500 group-hover:text-white"}`,
                       "h-6 w-6 shrink-0",
                     )}
                     aria-hidden="true"
