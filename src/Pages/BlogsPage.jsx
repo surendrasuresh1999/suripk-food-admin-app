@@ -10,11 +10,12 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import NodataFound from "../Common/NodataFound";
 import Context from "../Context/Context";
+import swal from "sweetalert";
 
 const BlogsPage = () => {
   const [openBlogDialog, setOpenBlogDialog] = useState(false);
   const queryClient = useQueryClient();
-  const { editableObj, setEditableObj } = useContext(Context);
+  const { editableObj, setEditableObj, defaultMode } = useContext(Context);
 
   const fetchingBlogs = async () => {
     return await fetch(`${Baseurl.baseurl}/api/blog`, {
@@ -57,6 +58,37 @@ const BlogsPage = () => {
       });
   };
 
+  const handleDeleteBlog = (blogId) => {
+    swal({
+      title: "Are you sure!",
+      text: "Are you sure? want to delete Blog, This action cannot be undone.",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+      className: `${defaultMode ? "dark-swal" : "white-swal"}`,
+    }).then((willDelete) => {
+      if (willDelete) {
+        axios
+          .delete(`${Baseurl.baseurl}/api/blog/${blogId}`, {
+            headers: {
+              Authorization: `Bearer ${Baseurl.token}`,
+            },
+          })
+          .then((res) => {
+            if (res.data.status) {
+              toast.success(res.data.message);
+              queryClient.invalidateQueries("blogsData");
+            } else {
+              toast.error(res.data.message);
+            }
+          })
+          .catch((err) => {
+            toast.error(err.message);
+          });
+      }
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
@@ -87,6 +119,7 @@ const BlogsPage = () => {
                 person={person}
                 key={index}
                 setter={setOpenBlogDialog}
+                handlerDelete={handleDeleteBlog}
               />
             ))}
           </ul>

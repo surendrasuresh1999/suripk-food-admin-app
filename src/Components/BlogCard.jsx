@@ -1,11 +1,11 @@
 import { PencilSquareIcon } from "@heroicons/react/16/solid";
-import { HeartIcon } from "@heroicons/react/20/solid";
+import { HeartIcon, TrashIcon } from "@heroicons/react/20/solid";
 import numeral from "numeral";
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import Context from "../Context/Context";
 
-const BlogCard = ({ person, setter }) => {
+const BlogCard = ({ person, setter, handlerDelete }) => {
   const { setEditableObj } = useContext(Context);
   return (
     <li
@@ -42,15 +42,25 @@ const BlogCard = ({ person, setter }) => {
             >
               Read More
             </Link>
-            <button
-              onClick={() => {
-                setter(true);
-                setEditableObj(person);
-              }}
-              className="rounded-md border bg-green-50 p-2"
-            >
-              <PencilSquareIcon className="h-5 w-5 text-green-500" />
-            </button>
+            <div className="space-x-3">
+              <button
+                onClick={() => {
+                  setter(true);
+                  setEditableObj(person);
+                }}
+                className="rounded-md border bg-green-50 p-2"
+              >
+                <PencilSquareIcon className="h-5 w-5 text-green-500" />
+              </button>
+              <button
+                onClick={() => {
+                  handlerDelete(person._id);
+                }}
+                className="rounded-md border bg-red-50 p-2"
+              >
+                <TrashIcon className="h-5 w-5 text-red-500" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

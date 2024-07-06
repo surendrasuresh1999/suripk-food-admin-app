@@ -20,7 +20,7 @@ import { ChevronUpIcon } from "@heroicons/react/20/solid";
 import Context from "../Context/Context";
 import swal from "sweetalert";
 import Cookies from "js-cookie";
-import logo from "../assets/1.svg";
+import logo from "../assets/logo_new.png";
 import darklogo from "../assets/mern-food-dark-logo.svg";
 
 const userNavigation = [
@@ -130,12 +130,14 @@ const CommonPage = () => {
                 </TransitionChild>
                 {/* Sidebar component, swap this element with another sidebar if you like */}
                 <div
-                  className={`flex grow flex-col gap-y-5 overflow-y-auto ${defaultMode ? "bg-gray-800" : "bg-white"} px-6 pb-4`}
+                  className={`flex grow flex-col gap-y-5 overflow-y-auto ${defaultMode ? "bg-gray-800" : "bg-white"} pb-4`}
                 >
-                  <div className="flex shrink-0 h-32 items-center">
-                    <img className="w-auto object-cover h-24" src={logo} alt="Your Company" />
+                  <div className="flex shrink-0 items-center justify-center border-b object-cover py-1">
+                    <img src={logo} alt="Your Company" className="w-[123px]" />
                   </div>
-                  <Sidebar />
+                  <div className="px-6">
+                    <Sidebar />
+                  </div>
                 </div>
               </DialogPanel>
             </TransitionChild>
@@ -146,11 +148,13 @@ const CommonPage = () => {
       {/* Static sidebar for desktop */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
         {/* Sidebar component, swap this element with another sidebar if you like */}
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r bg-white px-6 pb-4 dark:bg-gray-800">
-          <div className="flex shrink-0 items-center object-cover ">
-            <img src={logo} alt="Your Company" className="w-full"/>
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r bg-white pb-4 dark:bg-gray-800">
+          <div className="flex shrink-0 items-center justify-center border-b object-cover py-1">
+            <img src={logo} alt="Your Company" className="w-[123px]" />
           </div>
-          <Sidebar />
+          <div className="px-6">
+            <Sidebar />
+          </div>
         </div>
       </div>
 
