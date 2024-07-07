@@ -53,10 +53,6 @@ const graphCard = [
     title: "Orders graph",
     tooltipText: "Orders graph is current year-wise only",
   },
-  {
-    title: "Users graph",
-    tooltipText: "Users graph is current year-wise only",
-  },
 ];
 
 const DashboardPage = () => {
