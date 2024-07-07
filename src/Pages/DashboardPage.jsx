@@ -85,14 +85,6 @@ const DashboardPage = () => {
     }
   };
 
-  // const filteredData =
-  //   selectedDate !== null
-  //     ? data?.services.filter((service) => {
-  //         const eventDate = dayjs(service.eventDate, "DD/MM/YYYY");
-  //         return eventDate.isSame(dayjs(selectedDate, "DD/MM/YYYY"), "day"); // Compare dates by day
-  //       })
-  //     : data?.services;
-
   return (
     <div className="space-y-6">
       {isPending ? (
