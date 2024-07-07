@@ -7,14 +7,16 @@ import ServiceCard from "../Components/ServiceCard";
 import NodataFound from "../Common/NodataFound";
 import Calender from "../Common/Calender";
 import dayjs from "dayjs";
+import Cookies from "js-cookie";
 
 const ServicesPage = () => {
+  const jwtToken = Cookies.get("adminJwtToken");
   const [selectedDate, setSelectedDate] = useState(null);
 
   const fetchingServices = async () => {
     return await fetch(`${Baseurl.baseurl}/api/service`, {
       headers: {
-        Authorization: `Bearer ${Baseurl.token}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     }).then((res) => res.json());
   };

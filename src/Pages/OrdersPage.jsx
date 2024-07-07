@@ -27,6 +27,7 @@ import NodataFound from "../Common/NodataFound";
 import Context from "../Context/Context";
 import { BuildingOffice2Icon } from "@heroicons/react/24/solid";
 import { PhoneIcon, UserIcon } from "@heroicons/react/20/solid";
+import Cookies from "js-cookie";
 
 const tableHeadCells = [
   "Images",
@@ -45,6 +46,7 @@ const orderStatus = [
 ];
 
 const OrdersPage = () => {
+  const jwtToken = Cookies.get("adminJwtToken");
   const [openAddFoodDialog, setOpenAddFoodDialog] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -54,7 +56,7 @@ const OrdersPage = () => {
   const fetchAllOrders = async () => {
     return await fetch(`${Baseurl.baseurl}/api/orders`, {
       headers: {
-        Authorization: `Bearer ${Baseurl.token}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     }).then((res) => res.json());
   };
@@ -84,7 +86,7 @@ const OrdersPage = () => {
         { statusText },
         {
           headers: {
-            Authorization: `Bearer ${Baseurl.token}`,
+            Authorization: `Bearer ${jwtToken}`,
           },
         },
       )

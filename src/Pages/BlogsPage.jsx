@@ -11,16 +11,18 @@ import toast from "react-hot-toast";
 import NodataFound from "../Common/NodataFound";
 import Context from "../Context/Context";
 import swal from "sweetalert";
+import Cookies from "js-cookie";
 
 const BlogsPage = () => {
   const [openBlogDialog, setOpenBlogDialog] = useState(false);
+  const jwtToken = Cookies.get("adminJwtToken");
   const queryClient = useQueryClient();
   const { editableObj, setEditableObj, defaultMode } = useContext(Context);
 
   const fetchingBlogs = async () => {
     return await fetch(`${Baseurl.baseurl}/api/blog`, {
       headers: {
-        Authorization: `Bearer ${Baseurl.token}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     }).then((res) => res.json());
   };
@@ -39,7 +41,7 @@ const BlogsPage = () => {
       url: `${Baseurl.baseurl}/api/${urlString}`,
       data: blogData,
       headers: {
-        Authorization: `Bearer ${Baseurl.token}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     })
       .then((res) => {
@@ -71,7 +73,7 @@ const BlogsPage = () => {
         axios
           .delete(`${Baseurl.baseurl}/api/blog/${blogId}`, {
             headers: {
-              Authorization: `Bearer ${Baseurl.token}`,
+              Authorization: `Bearer ${jwtToken}`,
             },
           })
           .then((res) => {

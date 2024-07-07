@@ -4,14 +4,16 @@ import { Baseurl } from "../BaseUrl";
 import Loader from "../Common/Loader";
 import ConnectionLost from "../Common/ConnectionLost";
 import NodataFound from "../Common/NodataFound";
+import Cookies from "js-cookie";
 
 const SubscribersPage = () => {
   const queryClient = useQueryClient();
+  const jwtToken = Cookies.get("adminJwtToken");
 
   const fetchAllSubscribers = async () => {
     return await fetch(`${Baseurl.baseurl}/api/subscribe`, {
       headers: {
-        Authorization: `Bearer ${Baseurl.token}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     }).then((res) => res.json());
   };

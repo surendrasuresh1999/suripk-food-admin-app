@@ -6,15 +6,17 @@ import Loader from "../Common/Loader";
 import ConnectionLost from "../Common/ConnectionLost";
 import { ArrowLeftIcon, HeartIcon } from "@heroicons/react/16/solid";
 import numeral from "numeral";
+import Cookies from "js-cookie";
 
 const BlogDetailsPage = () => {
   const params = useParams();
   const queryClient = useQueryClient();
+  const jwtToken = Cookies.get("adminJwtToken");
 
   const fetchBlogDetails = async () => {
     return await fetch(`${Baseurl.baseurl}/api/blog/${params.id}`, {
       headers: {
-        Authorization: `Bearer ${Baseurl.token}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     }).then((res) => res.json());
   };

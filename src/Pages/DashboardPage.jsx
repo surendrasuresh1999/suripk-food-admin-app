@@ -17,6 +17,7 @@ import {
 } from "@heroicons/react/16/solid";
 import CommonChart from "../Common/CommonChart";
 import Calender from "../Common/Calender";
+import Cookies from "js-cookie";
 
 const cards = [
   {
@@ -56,13 +57,14 @@ const graphCard = [
 ];
 
 const DashboardPage = () => {
+  const jwtToken = Cookies.get("adminJwtToken");
   const queryClient = useQueryClient();
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedRelation, setSelectedRelation] = useState("");
   const fetchAllBoardData = async () => {
     return await fetch(`${Baseurl.baseurl}/api/dashboard`, {
       headers: {
-        Authorization: `Bearer ${Baseurl.token}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     }).then((res) => res.json());
   };

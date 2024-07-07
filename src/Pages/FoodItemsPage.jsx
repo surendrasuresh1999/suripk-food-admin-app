@@ -20,6 +20,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import NodataFound from "../Common/NodataFound";
 import Context from "../Context/Context";
+import Cookies from "js-cookie";
 
 const tableHeadCells = [
   "Image",
@@ -31,6 +32,7 @@ const tableHeadCells = [
 ];
 
 const FoodItemsPage = () => {
+  const jwtToken = Cookies.get("adminJwtToken");
   const [openAddFoodDialog, setOpenAddFoodDialog] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -40,7 +42,7 @@ const FoodItemsPage = () => {
   const fetchFoodItems = async () => {
     return await fetch(`${Baseurl.baseurl}/api/food`, {
       headers: {
-        Authorization: `Bearer ${Baseurl.token}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     }).then((res) => res.json());
   };

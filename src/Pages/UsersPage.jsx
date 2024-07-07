@@ -4,14 +4,16 @@ import Loader from "../Common/Loader";
 import ConnectionLost from "../Common/ConnectionLost";
 import NodataFound from "../Common/NodataFound";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import Cookies from "js-cookie";
 
 const UsersPage = () => {
   const queryClient = useQueryClient();
+  const jwtToken = Cookies.get("adminJwtToken");
 
   const fetchAllSubscribers = async () => {
     return await fetch(`${Baseurl.baseurl}/api/user/all`, {
       headers: {
-        Authorization: `Bearer ${Baseurl.token}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     }).then((res) => res.json());
   };
