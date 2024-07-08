@@ -14,11 +14,13 @@ import Login from "./Pages/Login";
 import ProtectedRoute from "./Pages/ProtectedRoute";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ForgotPasswordVerify from "./Pages/ForgotPasswordVerify";
+import SignupPage from "./Pages/SignupPage";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignupPage />} />
       <Route path="/reset-password" element={<ForgotPassword />} />
       <Route
         path="/reset-password-verify/:id/:token"

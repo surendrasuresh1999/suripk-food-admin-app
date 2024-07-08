@@ -6,8 +6,8 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import axios from "axios";
 import { Baseurl } from "../BaseUrl";
 import toast from "react-hot-toast";
-import Cookies from "js-cookie";
-const Login = () => {
+
+const SignupPage = () => {
   const navigate = useNavigate();
   const userObject = {
     email: "",
@@ -17,15 +17,10 @@ const Login = () => {
 
   const handleFormSubmit = (values, actions) => {
     axios
-      .post(`${Baseurl.baseurl}/api/admin/login`, values)
+      .post(`${Baseurl.baseurl}/api/admin/signup`, values)
       .then((res) => {
         if (res.data.status) {
-          localStorage.setItem(
-            "foodieAdminUserDetails",
-            JSON.stringify(res.data.isAdminExist),
-          );
-          Cookies.set("adminJwtToken", res.data.token, { expires: 120 });
-          navigate("/");
+          navigate("/login");
           actions.resetForm();
         } else {
           toast.error(res.data.message);
@@ -44,7 +39,7 @@ const Login = () => {
       <div className="flex h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="rounded-md bg-gray-600 p-4 sm:mx-auto sm:w-full sm:max-w-sm 2xl:max-w-md">
           <h2 className="mb-3 text-center text-2xl font-bold leading-9 tracking-tight text-white sm:text-30size">
-            Sign in
+            Sign up
           </h2>
           <Formik
             initialValues={userObject}
@@ -143,12 +138,12 @@ const Login = () => {
             )}
           </Formik>
           <p className="mt-2 text-sm text-white">
-            Don't have account?{" "}
+            Already have an account?{" "}
             <Link
-              to="/signup"
-              className="ml-2 text-16size font-semibold leading-6 text-blue-600 hover:text-blue-700"
+              to={"/login"}
+              className="ml-2 text-16size font-bold leading-6 tracking-wide text-blue-600 hover:text-blue-700"
             >
-              Register
+              Login
             </Link>
           </p>
         </div>
@@ -157,4 +152,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignupPage;
