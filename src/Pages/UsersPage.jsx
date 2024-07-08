@@ -5,11 +5,13 @@ import ConnectionLost from "../Common/ConnectionLost";
 import NodataFound from "../Common/NodataFound";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const UsersPage = () => {
   const queryClient = useQueryClient();
   const jwtToken = Cookies.get("adminJwtToken");
-
+  const navigate = useNavigate();
+  
   const fetchAllSubscribers = async () => {
     return await fetch(`${Baseurl.baseurl}/api/user/all`, {
       headers: {
@@ -59,6 +61,8 @@ const UsersPage = () => {
           <Loader />
         ) : error ? (
           <ConnectionLost />
+        ) : data && data.status === 401 ? (
+          navigate("/login")
         ) : data.users?.length > 0 ? (
           <ul
             role="list"

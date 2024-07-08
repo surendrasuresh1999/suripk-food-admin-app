@@ -28,6 +28,7 @@ import Context from "../Context/Context";
 import { BuildingOffice2Icon } from "@heroicons/react/24/solid";
 import { PhoneIcon, UserIcon } from "@heroicons/react/20/solid";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const tableHeadCells = [
   "Images",
@@ -52,6 +53,7 @@ const OrdersPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { defaultMode } = useContext(Context);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const fetchAllOrders = async () => {
     return await fetch(`${Baseurl.baseurl}/api/orders/admin`, {
@@ -208,6 +210,8 @@ const OrdersPage = () => {
         <Loader />
       ) : error ? (
         <ConnectionLost />
+      ) : data && data.status === 401 ? (
+        navigate("/login")
       ) : data.orders.length > 0 ? (
         <TableContainer component={Paper} className="bg-white dark:bg-gray-800">
           <Table>

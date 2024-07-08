@@ -5,10 +5,12 @@ import Loader from "../Common/Loader";
 import ConnectionLost from "../Common/ConnectionLost";
 import NodataFound from "../Common/NodataFound";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const SubscribersPage = () => {
   const queryClient = useQueryClient();
   const jwtToken = Cookies.get("adminJwtToken");
+  const navigate = useNavigate();
 
   const fetchAllSubscribers = async () => {
     return await fetch(`${Baseurl.baseurl}/api/subscribe`, {
@@ -62,6 +64,8 @@ const SubscribersPage = () => {
           <Loader />
         ) : error ? (
           <ConnectionLost />
+        ) : data && data.status === 401 ? (
+          navigate("/login")
         ) : data.subscribers?.length > 0 ? (
           <ul
             role="list"

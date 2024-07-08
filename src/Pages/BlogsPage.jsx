@@ -12,12 +12,14 @@ import NodataFound from "../Common/NodataFound";
 import Context from "../Context/Context";
 import swal from "sweetalert";
 import Cookies from "js-cookie";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const BlogsPage = () => {
   const [openBlogDialog, setOpenBlogDialog] = useState(false);
   const jwtToken = Cookies.get("adminJwtToken");
   const queryClient = useQueryClient();
   const { editableObj, setEditableObj, defaultMode } = useContext(Context);
+  const navigate = useNavigate();
 
   const fetchingBlogs = async () => {
     return await fetch(`${Baseurl.baseurl}/api/blog/admin`, {
@@ -111,6 +113,8 @@ const BlogsPage = () => {
           <Loader />
         ) : error ? (
           <ConnectionLost />
+        ) : data && data.status === 401 ? (
+          navigate("/login")
         ) : data.blogs?.length > 0 ? (
           <ul
             role="list"

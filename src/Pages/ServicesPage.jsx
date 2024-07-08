@@ -8,10 +8,12 @@ import NodataFound from "../Common/NodataFound";
 import Calender from "../Common/Calender";
 import dayjs from "dayjs";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const ServicesPage = () => {
   const jwtToken = Cookies.get("adminJwtToken");
   const [selectedDate, setSelectedDate] = useState(null);
+  const navigate = useNavigate();
 
   const fetchingServices = async () => {
     return await fetch(`${Baseurl.baseurl}/api/service/admin`, {
@@ -41,7 +43,7 @@ const ServicesPage = () => {
           return eventDate.isSame(dayjs(selectedDate, "DD/MM/YYYY"), "day"); // Compare dates by day
         })
       : data?.services;
-
+  console.log("adfasdf", filteredServices);
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
@@ -63,6 +65,8 @@ const ServicesPage = () => {
           <Loader />
         ) : error ? (
           <ConnectionLost />
+        ) : data && data.status === 401 ? (
+          navigate("/login")
         ) : filteredServices.length > 0 ? (
           <ul
             role="list"

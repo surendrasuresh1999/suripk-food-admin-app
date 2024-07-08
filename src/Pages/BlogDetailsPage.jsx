@@ -1,6 +1,6 @@
 import React from "react";
 import { Baseurl } from "../BaseUrl";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Loader from "../Common/Loader";
 import ConnectionLost from "../Common/ConnectionLost";
@@ -12,6 +12,7 @@ const BlogDetailsPage = () => {
   const params = useParams();
   const queryClient = useQueryClient();
   const jwtToken = Cookies.get("adminJwtToken");
+  const navigate = useNavigate();
 
   const fetchBlogDetails = async () => {
     return await fetch(`${Baseurl.baseurl}/api/blog/admin/${params.id}`, {
@@ -32,6 +33,8 @@ const BlogDetailsPage = () => {
         <Loader />
       ) : error ? (
         <ConnectionLost />
+      ) : data && data.status === 401 ? (
+        navigate("/login")
       ) : (
         <div className="space-y-4">
           <h1 className="text-18size font-bold tracking-wide text-black dark:text-white sm:text-36size">

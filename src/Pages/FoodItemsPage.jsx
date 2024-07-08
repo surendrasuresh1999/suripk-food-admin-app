@@ -21,6 +21,7 @@ import toast from "react-hot-toast";
 import NodataFound from "../Common/NodataFound";
 import Context from "../Context/Context";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const tableHeadCells = [
   "Image",
@@ -37,6 +38,7 @@ const FoodItemsPage = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { defaultMode, setEditableObj, editableObj } = useContext(Context);
 
   const fetchFoodItems = async () => {
@@ -152,6 +154,8 @@ const FoodItemsPage = () => {
           <Loader />
         ) : error ? (
           <ConnectionLost />
+        ) : data && data.status === 401 ? (
+          navigate("/login")
         ) : data.foodItems.length > 0 ? (
           <TableContainer
             component={Paper}

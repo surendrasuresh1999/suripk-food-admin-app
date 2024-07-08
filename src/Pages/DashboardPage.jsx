@@ -18,6 +18,7 @@ import {
 import CommonChart from "../Common/CommonChart";
 import Calender from "../Common/Calender";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const cards = [
   {
@@ -61,6 +62,7 @@ const DashboardPage = () => {
   const queryClient = useQueryClient();
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedRelation, setSelectedRelation] = useState("");
+  const navigate = useNavigate();
 
   const fetchAllBoardData = async () => {
     return await fetch(`${Baseurl.baseurl}/api/dashboard`, {
@@ -74,7 +76,7 @@ const DashboardPage = () => {
     queryKey: ["boardData"],
     queryFn: fetchAllBoardData,
   });
-  
+
   const hanldeCatchDate = (date) => {
     console.log("asdfasdfadsf", date.split(" ")[0]);
     setSelectedRelation(date.split(" ")[0]);
@@ -93,74 +95,80 @@ const DashboardPage = () => {
         <ConnectionLost />
       ) : (
         <>
-          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {cards.map((card, i) => (
-              <li
-                key={i}
-                className={`space-y-4 rounded-md ${card.gradientFrom} p-2 shadow`}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h1 className="text-18size font-medium tracking-wide text-white">
-                      {card.title}
+          {data && data.status === 401 ? (
+            navigate("/login")
+          ) : (
+            <>
+              <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {cards.map((card, i) => (
+                  <li
+                    key={i}
+                    className={`space-y-4 rounded-md ${card.gradientFrom} p-2 shadow`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h1 className="text-18size font-medium tracking-wide text-white">
+                          {card.title}
+                        </h1>
+                        <span className="text-24size font-bold tracking-wide text-white">
+                          {numeral(data?.data[i]?.total).format("0,a")}
+                        </span>
+                      </div>
+                      <span className={`rounded-md ${card.from} p-3`}>
+                        {card.icon}
+                      </span>
+                    </div>
+                    <p className="flex items-center gap-1 text-white">
+                      <span
+                        className={`${card.via} rounded-md px-2 py-1 font-semibold tracking-wide`}
+                      >
+                        +{data?.data[i]?.percentage}{" "}
+                      </span>
+                      {parseFloat(data?.data[i]?.percentage.replace("%", "")) >=
+                      50 ? (
+                        <ArrowTrendingUpIcon className="h-5 w-5 text-white" />
+                      ) : (
+                        <ArrowTrendingDownIcon className="h-5 w-5 text-white" />
+                      )}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+              {graphCard.map((graph, index) => (
+                <div
+                  key={index}
+                  className="space-y-5 rounded-lg bg-white p-2 shadow dark:bg-gray-900"
+                >
+                  <div className="flex flex-col justify-between sm:flex-row sm:items-center">
+                    <h1 className="flex items-center gap-1 text-24size font-semibold text-gray-700 dark:text-white sm:text-28size">
+                      {graph.title}{" "}
+                      <Tooltip
+                        title={graph.tooltipText}
+                        arrow
+                        placement="right-start"
+                      >
+                        <QuestionMarkCircleIcon className="mt-1.5 h-5 w-5 text-gray-500" />
+                      </Tooltip>
                     </h1>
-                    <span className="text-24size font-bold tracking-wide text-white">
-                      {numeral(data?.data[i]?.total).format("0,a")}
-                    </span>
+                    <Calender
+                      viewsArr={["year"]}
+                      disablePast={false}
+                      disableFuture={true}
+                      format="YYYY"
+                      hanlder={hanldeCatchDate}
+                      setterFun={setSelectedYear}
+                      relation={"orders"}
+                    />
                   </div>
-                  <span className={`rounded-md ${card.from} p-3`}>
-                    {card.icon}
-                  </span>
+                  <CommonChart
+                    graphData={
+                      index === 0 ? data.ordersChartData : data.usersChartData
+                    }
+                  />
                 </div>
-                <p className="flex items-center gap-1 text-white">
-                  <span
-                    className={`${card.via} rounded-md px-2 py-1 font-semibold tracking-wide`}
-                  >
-                    +{data?.data[i]?.percentage}{" "}
-                  </span>
-                  {parseFloat(data?.data[i]?.percentage.replace("%", "")) >=
-                  50 ? (
-                    <ArrowTrendingUpIcon className="h-5 w-5 text-white" />
-                  ) : (
-                    <ArrowTrendingDownIcon className="h-5 w-5 text-white" />
-                  )}
-                </p>
-              </li>
-            ))}
-          </ul>
-          {graphCard.map((graph, index) => (
-            <div
-              key={index}
-              className="space-y-5 rounded-lg bg-white p-2 shadow dark:bg-gray-900"
-            >
-              <div className="flex flex-col justify-between sm:flex-row sm:items-center">
-                <h1 className="flex items-center gap-1 text-24size font-semibold text-gray-700 dark:text-white sm:text-28size">
-                  {graph.title}{" "}
-                  <Tooltip
-                    title={graph.tooltipText}
-                    arrow
-                    placement="right-start"
-                  >
-                    <QuestionMarkCircleIcon className="mt-1.5 h-5 w-5 text-gray-500" />
-                  </Tooltip>
-                </h1>
-                <Calender
-                  viewsArr={["year"]}
-                  disablePast={false}
-                  disableFuture={true}
-                  format="YYYY"
-                  hanlder={hanldeCatchDate}
-                  setterFun={setSelectedYear}
-                  relation={"orders"}
-                />
-              </div>
-              <CommonChart
-                graphData={
-                  index === 0 ? data.ordersChartData : data.usersChartData
-                }
-              />
-            </div>
-          ))}
+              ))}
+            </>
+          )}
         </>
       )}
     </div>
