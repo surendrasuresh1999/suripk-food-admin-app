@@ -43,7 +43,7 @@ const ServicesPage = () => {
           return eventDate.isSame(dayjs(selectedDate, "DD/MM/YYYY"), "day"); // Compare dates by day
         })
       : data?.services;
-  console.log("adfasdf", filteredServices);
+  console.log("adfasdf", selectedDate);
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">

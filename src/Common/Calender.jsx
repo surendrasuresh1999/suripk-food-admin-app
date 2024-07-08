@@ -41,8 +41,8 @@ const Calender = ({
                 format === "YYYY"
                   ? relation === "orders"
                     ? dayjs(date).format("YYYY")
-                    : dayjs(date).format("DD/MM/YYYY")
-                  : null,
+                    : null
+                  : dayjs(date).format("DD/MM/YYYY"),
               );
             }}
             slotProps={{
