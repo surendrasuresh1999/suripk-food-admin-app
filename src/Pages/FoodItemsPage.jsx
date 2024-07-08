@@ -109,7 +109,7 @@ const FoodItemsPage = () => {
         axios
           .delete(`${Baseurl.baseurl}/api/food/${foodId}`, {
             headers: {
-              Authorization: `Bearer ${Baseurl.token}`,
+              Authorization: `Bearer ${jwtToken}`,
             },
           })
           .then((res) => {
