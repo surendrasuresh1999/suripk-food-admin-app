@@ -14,7 +14,7 @@ const ServicesPage = () => {
   const [selectedDate, setSelectedDate] = useState(null);
 
   const fetchingServices = async () => {
-    return await fetch(`${Baseurl.baseurl}/api/service`, {
+    return await fetch(`${Baseurl.baseurl}/api/service/admin`, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },

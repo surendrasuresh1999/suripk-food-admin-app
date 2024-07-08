@@ -54,7 +54,7 @@ const OrdersPage = () => {
   const queryClient = useQueryClient();
 
   const fetchAllOrders = async () => {
-    return await fetch(`${Baseurl.baseurl}/api/orders`, {
+    return await fetch(`${Baseurl.baseurl}/api/orders/admin`, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },

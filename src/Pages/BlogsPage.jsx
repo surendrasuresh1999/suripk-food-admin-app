@@ -20,7 +20,7 @@ const BlogsPage = () => {
   const { editableObj, setEditableObj, defaultMode } = useContext(Context);
 
   const fetchingBlogs = async () => {
-    return await fetch(`${Baseurl.baseurl}/api/blog`, {
+    return await fetch(`${Baseurl.baseurl}/api/blog/admin`, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
@@ -35,7 +35,7 @@ const BlogsPage = () => {
   const handleCreateBlog = (blogData, actions, action) => {
     const httpMethod = action === "new" ? "POST" : "PUT";
     const urlString =
-      action === "new" ? "blog" : `blog/update/${editableObj?._id}`;
+      action === "new" ? "blog/admin" : `blog/admin/update/${editableObj?._id}`;
     axios({
       method: httpMethod,
       url: `${Baseurl.baseurl}/api/${urlString}`,
@@ -71,7 +71,7 @@ const BlogsPage = () => {
     }).then((willDelete) => {
       if (willDelete) {
         axios
-          .delete(`${Baseurl.baseurl}/api/blog/${blogId}`, {
+          .delete(`${Baseurl.baseurl}/api/blog/admin/${blogId}`, {
             headers: {
               Authorization: `Bearer ${jwtToken}`,
             },

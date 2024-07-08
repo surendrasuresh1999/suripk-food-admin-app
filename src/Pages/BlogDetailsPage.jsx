@@ -14,7 +14,7 @@ const BlogDetailsPage = () => {
   const jwtToken = Cookies.get("adminJwtToken");
 
   const fetchBlogDetails = async () => {
-    return await fetch(`${Baseurl.baseurl}/api/blog/${params.id}`, {
+    return await fetch(`${Baseurl.baseurl}/api/blog/admin/${params.id}`, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },

@@ -39,8 +39,10 @@ const Calender = ({
               setSelectedDate(date);
               hanlder(
                 format === "YYYY"
-                  ? `${relation === "orders" ? "orders " : "users "}${dayjs(date).format("YYYY")}`
-                  : dayjs(date).format("DD/MM/YYYY"),
+                  ? relation === "orders"
+                    ? dayjs(date).format("YYYY")
+                    : dayjs(date).format("DD/MM/YYYY")
+                  : null,
               );
             }}
             slotProps={{

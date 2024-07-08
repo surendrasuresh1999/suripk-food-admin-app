@@ -40,7 +40,7 @@ const FoodItemsPage = () => {
   const { defaultMode, setEditableObj, editableObj } = useContext(Context);
 
   const fetchFoodItems = async () => {
-    return await fetch(`${Baseurl.baseurl}/api/food`, {
+    return await fetch(`${Baseurl.baseurl}/api/food/admin`, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },

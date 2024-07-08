@@ -61,6 +61,7 @@ const DashboardPage = () => {
   const queryClient = useQueryClient();
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedRelation, setSelectedRelation] = useState("");
+
   const fetchAllBoardData = async () => {
     return await fetch(`${Baseurl.baseurl}/api/dashboard`, {
       headers: {
@@ -73,8 +74,9 @@ const DashboardPage = () => {
     queryKey: ["boardData"],
     queryFn: fetchAllBoardData,
   });
+  
   const hanldeCatchDate = (date) => {
-    // console.log("asdfasdfadsf", date.split(" ")[0]);
+    console.log("asdfasdfadsf", date.split(" ")[0]);
     setSelectedRelation(date.split(" ")[0]);
     if (date === "Invalid Date") {
       setSelectedYear(null);
@@ -149,7 +151,7 @@ const DashboardPage = () => {
                   format="YYYY"
                   hanlder={hanldeCatchDate}
                   setterFun={setSelectedYear}
-                  relation={index === 0 ? "orders" : "users"}
+                  relation={"orders"}
                 />
               </div>
               <CommonChart
