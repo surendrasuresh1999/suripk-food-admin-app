@@ -13,6 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import ConnectionLost from "../Common/ConnectionLost";
 import {
   ArrowTrendingDownIcon,
+  BanknotesIcon,
   QuestionMarkCircleIcon,
 } from "@heroicons/react/16/solid";
 import CommonChart from "../Common/CommonChart";
@@ -46,6 +47,15 @@ const cards = [
     gradientFrom: "bg-gradient-to-r from-[#2069CD] via-[#367FD5] to-[#4994DB]",
     from: "bg-[#2069CD]",
     via: "bg-[#367FD5]",
+    lable: "items",
+  },
+  {
+    title: "Total Amount",
+    value: 120,
+    icon: <BanknotesIcon className="h-9 w-9 text-[#f3a63b]" />,
+    gradientFrom: "bg-gradient-to-r from-[#fcb268] via-[#fabb7d] to-[#f5c390]",
+    from: "bg-[#fadbbb]",
+    via: "bg-[#f5a453]",
     lable: "items",
   },
 ];
