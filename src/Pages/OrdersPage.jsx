@@ -233,7 +233,7 @@ const OrdersPage = () => {
                     <TableCell component="th" scope="row">
                       <AvatarGroup max={3} className="flex w-max justify-end">
                         {row.orderItems.map((item, i) => (
-                          <Avatar alt="cover-img" src={item.imageUrl} />
+                          <Avatar key={i} alt="cover-img" src={item.imageUrl} />
                         ))}
                       </AvatarGroup>
                     </TableCell>
