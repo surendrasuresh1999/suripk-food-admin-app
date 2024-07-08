@@ -12,11 +12,18 @@ import BlogDetailsPage from "./Pages/BlogDetailsPage";
 import UsersPage from "./Pages/UsersPage";
 import Login from "./Pages/Login";
 import ProtectedRoute from "./Pages/ProtectedRoute";
+import ForgotPassword from "./Pages/ForgotPassword";
+import ForgotPasswordVerify from "./Pages/ForgotPasswordVerify";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/reset-password" element={<ForgotPassword />} />
+      <Route
+        path="/reset-password-verify/:id/:token"
+        element={<ForgotPasswordVerify />}
+      />
       <Route element={<ProtectedRoute />}>
         <Route path="" element={<CommonPage />}>
           <Route index element={<DashboardPage />} />

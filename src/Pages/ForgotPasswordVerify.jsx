@@ -1,35 +1,42 @@
-import { Eye, EyeOff, LoaderCircle } from "lucide-react";
+import { Field, Form, Formik, ErrorMessage } from "formik";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { userLoginSchema } from "../FormikSchemas";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import axios from "axios";
-import { Baseurl } from "../BaseUrl";
+import { resetPasswordSchema } from "../FormikSchemas";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import toast from "react-hot-toast";
-import Cookies from "js-cookie";
-const Login = () => {
+import { Baseurl } from "../BaseUrl";
+import axios from "axios";
+
+const ForgotPasswordVerify = () => {
   const navigate = useNavigate();
+  const { id, token } = useParams();
+
   const userObject = {
-    email: "",
-    password: "",
+    newPassword: "",
+    confirmPassword: "",
   };
   const [showPassword, setShowPassword] = useState(false);
 
   const handleFormSubmit = (values, actions) => {
+    let data = {
+      password: values.newPassword,
+    };
     axios
-      .post(`${Baseurl.baseurl}/api/admin/login`, values)
+      .put(
+        `${Baseurl.baseurl}/api/admin/reset-password-verify/${id}/${token}`,
+        data,
+      )
       .then((res) => {
         if (res.data.status) {
-          localStorage.setItem(
-            "foodieAdminUserDetails",
-            JSON.stringify(res.data.isAdminExist),
-          );
-          Cookies.set("adminJwtToken", res.data.token, { expires: 120 });
-          navigate("/");
-          actions.resetForm();
+          toast.success(res.data.message);
+          setTimeout(() => {
+            actions.setSubmitting(false);
+            actions.resetForm();
+            navigate("/login");
+          }, 2000);
         } else {
           toast.error(res.data.message);
-          console.log("res", res.data.message);
+          console.log("res", res);
           actions.setSubmitting(false);
         }
       })
@@ -39,51 +46,38 @@ const Login = () => {
         actions.setSubmitting(false);
       });
   };
+
   return (
     <div className="h-dvh bg-gray-900">
       <div className="flex h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="rounded-md bg-gray-600 p-4 sm:mx-auto sm:w-full sm:max-w-sm 2xl:max-w-md">
+        <div className="rounded-xl bg-slate-500 p-4 sm:mx-auto sm:w-full sm:max-w-sm 2xl:max-w-md">
           <h2 className="mb-3 text-center text-2xl font-bold leading-9 tracking-tight text-white sm:text-30size">
-            Sign in
+            Reset your password
           </h2>
           <Formik
             initialValues={userObject}
-            validationSchema={userLoginSchema}
+            validationSchema={resetPasswordSchema}
             onSubmit={handleFormSubmit}
           >
             {({ isSubmitting, touched, errors }) => (
-              <Form className="flex flex-col gap-2">
+              <Form className="flex flex-col gap-3">
                 {Object.keys(userObject).map((key, index) => (
                   <div key={index} className="flex flex-col gap-1">
-                    <div className="flex items-center justify-between">
-                      <label
-                        htmlFor={key}
-                        className="block text-sm font-medium leading-6 text-white"
-                      >
-                        {key.charAt(0).toUpperCase()}
-                        {key.slice(1, key.length)}
-                      </label>
-                      {key === "password" && (
-                        <p className="font-600 text-right text-14size tracking-wide text-gray-900">
-                          <Link
-                            to="/reset-password"
-                            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-                          >
-                            Forgot Password?
-                          </Link>
-                        </p>
-                      )}
-                    </div>
-                    {key === "password" ? (
-                      <Field name="password">
-                        {({
-                          field /* { name, value, onChange, onBlur } */,
-                        }) => (
+                    <label
+                      htmlFor={key}
+                      className="block text-sm font-medium leading-6 text-white"
+                    >
+                      {key.charAt(0).toUpperCase()}
+                      {key.slice(1, key.length)}
+                    </label>
+                    {key === "confirmPassword" ? (
+                      <Field name="confirmPassword">
+                        {({ field }) => (
                           <div className="relative rounded-md shadow-sm">
                             <input
                               {...field}
                               type={showPassword ? "text" : "password"}
-                              placeholder="Enter Password"
+                              placeholder="Password"
                               className={`block w-full rounded-md border bg-gray-600 pr-10 ${
                                 touched[key] && errors[key]
                                   ? "border-red-500"
@@ -106,9 +100,9 @@ const Login = () => {
                       </Field>
                     ) : (
                       <Field
-                        type={key}
+                        type={key === "newPassword" ? "password" : key}
                         name={key}
-                        placeholder="Enter email address"
+                        placeholder={`Enter ${key}`}
                         className={`grow rounded-md border bg-gray-600 ${
                           touched[key] && errors[key]
                             ? "border-red-500"
@@ -118,11 +112,8 @@ const Login = () => {
                     )}
                     <ErrorMessage
                       name={key}
-                      render={(msg) => (
-                        <p className="text-12size font-semibold tracking-wide text-red-600">
-                          {msg}
-                        </p>
-                      )}
+                      component="p"
+                      className="mt-1 text-sm text-red-700"
                     />
                   </div>
                 ))}
@@ -142,10 +133,19 @@ const Login = () => {
               </Form>
             )}
           </Formik>
+          <p className="mt-2 text-sm text-white">
+            Remembered your password?{" "}
+            <Link
+              to="/login"
+              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+            >
+              Login
+            </Link>
+          </p>
         </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default ForgotPasswordVerify;
