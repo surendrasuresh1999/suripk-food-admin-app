@@ -77,7 +77,7 @@ const FoodItemsPage = () => {
       url: `${Baseurl.baseurl}/api/${urlString}`,
       data: foddData,
       headers: {
-        Authorization: `Bearer ${Baseurl.token}`,
+        Authorization: `Bearer ${jwtToken}`,
       },
     })
       .then((res) => {
